@@ -6121,11 +6121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const zone = zoneEl.getAttribute('data-catalog-zone');
         const key = catalogZoneMap[zone];
         if (!key) return;
-
-        // Visual: marcar esta zona como la seleccionada
-        document.querySelectorAll('.catalog-hotspot').forEach(z => z.classList.remove('active'));
-        zoneEl.classList.add('active');
-
         if (typeof appState !== 'undefined') appState.catalogFilterMuscle = key;
         activateCatalogMuscleLayer(zone);
         activeCatalogZone = zone;
