@@ -2797,6 +2797,11 @@ img[src*="ic_next"] {
   mask-size: contain;
   -webkit-mask-position: center;
   mask-position: center;
+  transition: filter 0.2s ease, box-shadow 0.2s ease;
+}
+.catalog-hotspot.active {
+  filter: brightness(1.35) contrast(1.25);
+  box-shadow: 0 0 0 3px rgba(255, 214, 0, 0.95), 0 0 26px rgba(255, 109, 0, 0.85) inset;
 }
 .hotspot-chest {
   -webkit-mask-image: url('./GYMTOP/resources/res/drawable/frente_gm1.png');
@@ -2852,38 +2857,18 @@ img[src*="ic_next"] {
 .hotspot-back-shoulders {
   -webkit-mask-image: url('./GYMTOP/resources/res/drawable/tras_gm9.png'), url('./GYMTOP/resources/res/drawable/tras_gm0.png');
   mask-image: url('./GYMTOP/resources/res/drawable/tras_gm9.png'), url('./GYMTOP/resources/res/drawable/tras_gm0.png');
-  -webkit-mask-size: 195.27px 380px, 195.27px 380px;
-  mask-size: 195.27px 380px, 195.27px 380px;
-  -webkit-mask-position: -68.46px -33.44px, -68.46px -33.44px;
-  mask-position: -68.46px -33.44px, -68.46px -33.44px;
-  -webkit-mask-composite: source-over, source-over;
-  mask-composite: add;
 }
 .hotspot-back-back {
   -webkit-mask-image: url('./GYMTOP/resources/res/drawable/tras_gm10.png'), url('./GYMTOP/resources/res/drawable/tras_gm11.png'), url('./GYMTOP/resources/res/drawable/tras_gm2.png'), url('./GYMTOP/resources/res/drawable/tras_gm5.png'), url('./GYMTOP/resources/res/drawable/tras_gm3.png'), url('./GYMTOP/resources/res/drawable/tras_gm12.png'), url('./GYMTOP/resources/res/drawable/tras_gm13.png'), url('./GYMTOP/resources/res/drawable/tras_gm7.png');
   mask-image: url('./GYMTOP/resources/res/drawable/tras_gm10.png'), url('./GYMTOP/resources/res/drawable/tras_gm11.png'), url('./GYMTOP/resources/res/drawable/tras_gm2.png'), url('./GYMTOP/resources/res/drawable/tras_gm5.png'), url('./GYMTOP/resources/res/drawable/tras_gm3.png'), url('./GYMTOP/resources/res/drawable/tras_gm12.png'), url('./GYMTOP/resources/res/drawable/tras_gm13.png'), url('./GYMTOP/resources/res/drawable/tras_gm7.png');
-  -webkit-mask-size: 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px;
-  mask-size: 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px, 195.27px 380px;
-  -webkit-mask-position: -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px;
-  mask-position: -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px, -41.84px -71.82px;
-  -webkit-mask-composite: source-over, source-over, source-over, source-over, source-over, source-over, source-over;
-  mask-composite: add, add, add, add, add, add, add;
 }
 .hotspot-back-glutes {
   -webkit-mask-image: url('./GYMTOP/resources/res/drawable/tras_gm14.png');
   mask-image: url('./GYMTOP/resources/res/drawable/tras_gm14.png');
-  -webkit-mask-size: 195.27px 380px;
-  mask-size: 195.27px 380px;
-  -webkit-mask-position: -87.16px -195.32px;
-  mask-position: -87.16px -195.32px;
 }
 .hotspot-back-legs {
   -webkit-mask-image: url('./GYMTOP/resources/res/drawable/tras_gm15.png');
   mask-image: url('./GYMTOP/resources/res/drawable/tras_gm15.png');
-  -webkit-mask-size: 195.27px 380px;
-  mask-size: 195.27px 380px;
-  -webkit-mask-position: -81.66px -267.90px;
-  mask-position: -81.66px -267.90px;
 }
 
 .hotspot-chest {
