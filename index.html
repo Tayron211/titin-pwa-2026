@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>TOP-GYM - Workout Plan & Coach Hub</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="app.css?v=133">
+  <!-- TOP-GYM Build 133 Production Deploy - Maniqui: highlight exacto a silueta (sin circulos) + mascaras frontales/traseras -->
+
+  <!-- Favicons and Browser Tab Icons -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <!-- Mobile PWA & Push Notification Capabilities (WhatsApp-parity) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-touch-fullscreen" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" id="metaStatusBar" content="default">
+  <meta name="apple-mobile-web-app-title" content="TOP-GYM">
+  <meta name="application-name" content="TOP-GYM">
+  <meta name="msapplication-TileColor" content="#0c0d11">
+  <meta name="msapplication-navbutton-color" id="metaMsNavColor" content="#0c0d11">
+
+  <!-- Mobile & Browser Header Theme Color (Full iOS Safari, Dynamic Island & Android Parity) -->
+  <meta name="color-scheme" id="metaColorScheme" content="dark light">
+  <meta name="theme-color" id="metaThemeColor" content="#0c0d11">
+  <meta name="theme-color" id="metaThemeColorLight" media="(prefers-color-scheme: light)" content="#ffffff">
+  <meta name="theme-color" id="metaThemeColorDark" media="(prefers-color-scheme: dark)" content="#0c0d11">
+
+  <!-- Critical Synchronous Stylesheet for Instant Status Bar / Notch Painting -->
+  <style id="critical-theme-style">
+    html {
+      background-color: #0c0d11;
+      color-scheme: dark;
+    }
+    html[data-theme="light"],
+    :root[data-theme="light"] {
+      background-color: #ffffff !important;
+      color-scheme: light !important;
+    }
+    html[data-theme="dark"],
+    :root[data-theme="dark"] {
+      background-color: #0c0d11 !important;
+      color-scheme: dark !important;
+    }
+    body {
+      background-color: #0c0d11;
+    }
+    html[data-theme="light"] body {
+      background-color: #f5f7fb !important;
+    }
+    .app-header {
+      padding-top: max(0.75rem, calc(0.75rem + env(safe-area-inset-top, 0px)));
+    }
+    @media (max-width: 768px) {
+      .app-header {
+        padding-top: max(0.65rem, calc(0.65rem + env(safe-area-inset-top, 0px)));
+      }
+    }
+    @media (max-width: 520px) {
+      .app-header {
+        padding-top: max(0.5rem, calc(0.5rem + env(safe-area-inset-top, 0px)));
+      }
+    }
+  </style>
+
+  <!-- Immediate Theme & Multitasking Resume Initialization (Zero Flash & Zero Restart Delay) -->
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('topgym_theme');
+        var systemPref = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        var theme = (saved === 'light' || saved === 'dark') ? saved : systemPref;
+        var isLight = (theme === 'light');
+        var themeColor = isLight ? '#ffffff' : '#0c0d11';
+        var statusBarStyle = isLight ? 'default' : 'black-translucent';
+
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.style.backgroundColor = themeColor;
+        document.documentElement.style.colorScheme = theme;
+
+        var metaTheme = document.getElementById('metaThemeColor');
+        if (metaTheme) metaTheme.setAttribute('content', themeColor);
+        var metaLight = document.getElementById('metaThemeColorLight');
+        if (metaLight) metaLight.setAttribute('content', themeColor);
+        var metaDark = document.getElementById('metaThemeColorDark');
+        if (metaDark) metaDark.setAttribute('content', themeColor);
+        var metaStatus = document.getElementById('metaStatusBar');
+        if (metaStatus) metaStatus.setAttribute('content', statusBarStyle);
+        var metaScheme = document.getElementById('metaColorScheme');
+        if (metaScheme) metaScheme.setAttribute('content', theme);
+        var metaMs = document.getElementById('metaMsNavColor');
+        if (metaMs) metaMs.setAttribute('content', themeColor);
+
+        // Si la app se reanuda de multitarea en el móvil o ya inició sesión, omitir el splash de inmediato para evitar reinicios
+        var hasActiveSession = !!(localStorage.getItem('topgym_session_auth') || localStorage.getItem('topgym_current_user_id') || localStorage.getItem('topgym_active_user'));
+        var wasLoaded = (sessionStorage.getItem('topgym_app_loaded') === 'true') || (localStorage.getItem('topgym_app_loaded') === 'true');
+        if (hasActiveSession || wasLoaded) {
+          var resumeStyle = document.createElement('style');
+          resumeStyle.id = 'pwa-instant-resume-style';
+          resumeStyle.textContent = '#appSplashScreen { display: none !important; }';
+          document.head.appendChild(resumeStyle);
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!-- OFFICIAL TOP-GYM NATIVE APP SPLASH SCREEN                    -->
+  <!-- ============================================================ -->
+  <div id="appSplashScreen" class="app-splash-screen">
+    <div class="splash-center-content">
+      <div class="splash-logo-wrapper">
+        <div class="splash-glow-aura"></div>
+        <img src="./GYMTOP/resources/res/drawable-xxhdpi/splash_logo_icon.png" alt="TOP-GYM" class="splash-logo-image">
+      </div>
+      <h1 class="splash-brand-title">TOP-GYM</h1>
+      <span class="splash-badge-pill">PRO TRAINING SYSTEM</span>
+    </div>
+  </div>
+
+  <!-- Top Application Header with Official TOP-GYM Branding -->
+  <header class="app-header">
+    <button type="button" class="brand-wrapper brand-home-btn" id="brandBtn" title="Ir al Inicio (TOP-GYM)" aria-label="Ir a la pantalla de Inicio de TOP-GYM">
+      <img src="./GYMTOP/resources/res/drawable-xxhdpi/splash_logo_icon.png" alt="TOP-GYM Logo" class="brand-icon-logo">
+      <div class="brand-text-box">
+        <span class="brand-title">TOP-GYM</span>
+        <span class="brand-tagline">Pro Training</span>
+      </div>
+    </button>
+
+    <!-- Header Right: Student Profile & Restricted Coach Access Button -->
+    <div class="role-badge-box" style="display: flex; align-items: center; gap: 0.5rem;">
+      <!-- Coach Mode Active Bar (Only shown when Coach is logged in) -->
+      <div id="coachActiveBar" class="coach-header-box" style="display: none; position: relative; align-items: center;">
+        <!-- Botón Único Unificado de Perfil del Coach con Campana de Notificaciones Integrada -->
+        <button type="button" class="user-profile-summary coach-profile-summary coach-unified-profile-btn" id="coachProfilePickerBtn" title="Ver mi perfil de Coach y avisos de alumnos" aria-label="Perfil del Coach Humberto y notificaciones" aria-haspopup="true">
+          <div class="user-avatar-wrap">
+            <img src="./GYMTOP/resources/res/drawable/img_bg_inspiration_phrase_screen_default_1.jpg" alt="Coach Humberto" class="user-avatar-mini coach-avatar-mini" id="headerCoachAvatar">
+            <span class="coach-live-dot"></span>
+          </div>
+          <span class="user-name-mini" id="headerCoachUserName">Coach Humberto</span>
+          <span class="unified-notif-bell-chip" id="coachUnifiedBellChip" title="Avisos y mensajes de alumnos">
+            <svg viewBox="0 0 24 24" class="notif-bell-icon"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span class="coach-notif-unread-badge" id="coachHeaderNotifBadge" style="display: none;">0</span>
+          </span>
+          <svg viewBox="0 0 24 24" class="profile-dropdown-caret" style="width: 13px; height: 13px;"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
+
+        <!-- Dropdown Flotante del Coach Humberto (Esquina Superior Derecha) -->
+        <div id="coachProfileDropdown" class="student-profile-dropdown coach-profile-dropdown" style="display: none;">
+          <!-- Información breve del coach -->
+          <div class="dropdown-user-header">
+            <img src="./GYMTOP/resources/res/drawable/img_bg_inspiration_phrase_screen_default_1.jpg" alt="Coach Humberto" class="dropdown-user-avatar" id="dropdownCoachUserAvatar" style="border-color: #00b0ff; box-shadow: 0 0 10px rgba(0, 176, 255, 0.35);">
+            <div class="dropdown-user-details">
+              <strong id="dropdownCoachUserName" class="dropdown-user-name">Humberto Salinas</strong>
+              <div class="dropdown-user-tags">
+                <span class="dropdown-role-tag" style="color: #00b0ff; background: rgba(0, 176, 255, 0.14);">Coach Oficial</span>
+                <span class="dropdown-modality-tag" style="color: #ffd180; background: rgba(255, 145, 0, 0.12);">Gestión de Alumnos</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notificaciones de Alumnos para el Coach Humberto -->
+          <div class="dropdown-notif-box coach-notif-box">
+            <div class="dropdown-notif-header" id="dropdownCoachNotifHeader" style="cursor: pointer;" title="Toca para ir a la Bandeja de Entregas & Mensajes">
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: #00b0ff;"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                <span style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #00b0ff;">Actividad de Alumnos</span>
+              </div>
+              <span class="dropdown-notif-counter" id="dropdownCoachNotifCounter" style="background: #00b0ff;">0</span>
+            </div>
+            <div class="dropdown-notif-content" id="dropdownCoachNotifContent">
+              <!-- Dinámico en JS: Notificaciones de alumnos -->
+            </div>
+            <div class="dropdown-notif-footer" id="dropdownCoachNotifFooter">
+              <button type="button" id="dropdownCoachGoToInboxBtn" class="dropdown-task-link-btn coach-inbox-link-btn" title="Ir a la bandeja y ver todos los mensajes y entregas">
+                <span style="display: flex; align-items: center; gap: 8px;">
+                  <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor; flex-shrink: 0;"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                  <span>Ver todos los mensajes en la bandeja</span>
+                </span>
+                <svg viewBox="0 0 24 24" class="dropdown-link-chevron"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="dropdown-menu-separator"></div>
+
+          <!-- Opciones del menú del Coach -->
+          <div class="dropdown-menu-actions">
+            <button type="button" class="dropdown-menu-btn" id="dropdownCoachEditProfileBtn">
+              <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: #00b0ff;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+              <div class="dropdown-btn-text">
+                <strong>Editar Perfil del Coach</strong>
+                <span>Nombre, datos y contraseña de acceso</span>
+              </div>
+            </button>
+            <button type="button" class="dropdown-menu-btn" id="dropdownCoachThemeToggleBtn" title="Cambiar entre Modo Claro y Oscuro">
+              <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: #00b0ff;"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+              <div class="dropdown-btn-text">
+                <strong>Modo Claro / Oscuro</strong>
+                <span id="dropdownCoachThemeStatusSubtitle">Actualmente: Modo Oscuro</span>
+              </div>
+              <span class="dropdown-theme-mini-switch coach-mini-switch" id="coachThemeMiniSwitch">
+                <span class="dropdown-theme-mini-thumb"></span>
+              </span>
+            </button>
+            <button type="button" class="dropdown-menu-btn dropdown-btn-logout" id="dropdownCoachLogoutBtn">
+              <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: #ef4444;"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+              <div class="dropdown-btn-text">
+                <strong style="color: #ef4444;">Cerrar Sesión de Coach</strong>
+                <span>Salir del portal de entrenador</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Profile Summary (Student, visible when Student is active) -->
+      <div id="studentHeaderBox" class="student-header-box" style="display: flex; align-items: center; gap: 0.5rem; position: relative;">
+        <!-- Banner indicator if Coach is previewing this student -->
+        <button id="coachReturnBtn" class="btn-primary btn-coach" style="display: none; padding: 0.32rem 0.65rem; font-size: 0.72rem; font-weight: 800; border-radius: var(--radius-full); gap: 4px;" title="Regresar al panel de Coach">
+          <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: currentColor;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          <span>Volver a Coach</span>
+        </button>
+
+        <!-- Botón Único Unificado de Perfil del Alumno con Campana de Notificaciones Integrada -->
+        <button type="button" class="user-profile-summary student-unified-profile-btn" id="profilePickerBtn" title="Ver mi perfil y notificaciones del Coach" aria-label="Perfil del Alumno y notificaciones" aria-haspopup="true">
+          <div class="user-avatar-wrap">
+            <img src="./GYMTOP/resources/res/drawable/im_comentario_4.jpg" alt="Avatar" class="user-avatar-mini" id="headerAvatar">
+            <span class="avatar-edit-dot"></span>
+          </div>
+          <span class="user-name-mini" id="headerUserName">Mateo Gómez</span>
+          <span class="unified-notif-bell-chip" id="studentUnifiedBellChip" title="Avisos y rutinas del Coach">
+            <svg viewBox="0 0 24 24" class="notif-bell-icon"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span class="student-notif-unread-badge" id="studentHeaderNotifBadge" style="display: none;">0</span>
+          </span>
+          <svg viewBox="0 0 24 24" class="profile-dropdown-caret" style="width: 13px; height: 13px; fill: var(--text-secondary);"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
+
+        <!-- Dropdown Flotante del Alumno (Esquina Superior Derecha) -->
+        <div id="studentProfileDropdown" class="student-profile-dropdown" style="display: none;">
+          <!-- Información breve del alumno -->
+          <div class="dropdown-user-header">
+            <img src="./GYMTOP/resources/res/drawable/im_comentario_4.jpg" alt="Avatar" class="dropdown-user-avatar" id="dropdownUserAvatar">
+            <div class="dropdown-user-details">
+              <strong id="dropdownUserName" class="dropdown-user-name">Mateo Gómez</strong>
+              <div class="dropdown-user-tags">
+                <span class="dropdown-role-tag">Alumno</span>
+                <span class="dropdown-modality-tag" id="dropdownUserModality">Máquinas</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notificaciones del Coach Humberto Salinas -->
+          <div class="dropdown-notif-box">
+            <div class="dropdown-notif-header">
+              <div style="display: flex; align-items: center; gap: 5px; min-width: 0;">
+                <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: var(--accent-orange); flex-shrink: 0;"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; color: var(--accent-orange); white-space: nowrap;">Avisos del Coach</span>
+              </div>
+              <span class="dropdown-notif-counter" id="dropdownNotifCounter">1 rutina</span>
+            </div>
+            <div class="dropdown-notif-content" id="dropdownNotifContent">
+              <div class="dropdown-coach-msg-card">
+                <img src="./GYMTOP/resources/res/drawable/img_bg_inspiration_phrase_screen_default_1.jpg" alt="Coach Humberto Salinas" class="dropdown-coach-avatar">
+                <div class="dropdown-coach-text">
+                  <div class="dropdown-coach-title-label" style="font-size: 0.72rem; font-weight: 700;">Coach Humberto Salinas</div>
+                  <p id="dropdownCoachMessageText" style="font-size: 0.76rem; color: var(--text-secondary); margin: 2px 0 0 0; line-height: 1.35;">
+                    Tienes 1 tarea asignada en tu cronograma.
+                  </p>
+                </div>
+              </div>
+              <button type="button" id="dropdownGoToTasksBtn" class="dropdown-task-link-btn">
+                <span>Ver tarea en Cronograma</span>
+                <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: currentColor;"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="dropdown-menu-separator"></div>
+
+          <!-- Opciones del menú desplegable -->
+          <div class="dropdown-menu-actions">
+            <button type="button" class="dropdown-menu-btn" id="dropdownEditProfileBtn">
+              <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: var(--accent-orange);"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+              <div class="dropdown-btn-text">
+                <strong>Editar Perfil</strong>
+                <span>Nombre, datos y contraseña</span>
+              </div>
+            </button>
+            <button type="button" class="dropdown-menu-btn" id="dropdownThemeToggleBtn" title="Cambiar entre Modo Claro y Oscuro">
+              <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: var(--accent-orange);"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+              <div class="dropdown-btn-text">
+                <strong>Modo Claro / Oscuro</strong>
+                <span id="dropdownThemeStatusSubtitle">Actualmente: Modo Oscuro</span>
+              </div>
+              <span class="dropdown-theme-mini-switch" id="studentThemeMiniSwitch">
+                <span class="dropdown-theme-mini-thumb"></span>
+              </span>
+            </button>
+            <button type="button" class="dropdown-menu-btn dropdown-btn-logout" id="dropdownLogoutBtn">
+              <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: #ef4444;"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+              <div class="dropdown-btn-text">
+                <strong style="color: #ef4444;">Cerrar Sesión</strong>
+                <span>Salir de tu cuenta</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Restricted Coach Entry Button (Protected with PIN 0204, visible only to coach) -->
+      <button class="btn-coach-lock" id="openCoachAuthModalBtn" style="display: none;" title="Acceso exclusivo para Coach Humberto Salinas (PIN 0204)">
+        <svg viewBox="0 0 24 24" class="coach-lock-icon" fill="#ff9100" width="14" height="14">
+          <path fill="#ff9100" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+        </svg>
+        <span class="coach-lock-text">Coach</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Desktop Tab Navigation with Authentic Gym WP Drawables -->
+  <nav class="nav-tabs-bar" id="desktopNav">
+    <button class="tab-nav-btn active" data-screen="scheduleScreen">
+      <svg viewBox="0 0 27 25" class="nav-tab-icon" width="20" height="20">
+        <path d="M23.041,1.7C21.489,2.085 20.164,2.423 20.101,2.46C19.937,2.55 19.895,2.761 19.995,2.967C20.037,3.062 20.349,3.399 20.687,3.711C21.315,4.302 21.368,4.371 21.32,4.503C21.283,4.592 20.285,5.247 19.372,5.78C15.181,8.224 10.594,9.924 6.097,10.7C4.54,10.969 3.716,11.059 1.921,11.148L0.66,11.212L0.443,11.365C0.137,11.581 0,11.861 0,12.273C0,12.547 0.026,12.632 0.164,12.827C0.501,13.307 0.834,13.376 2.491,13.291C8.947,12.959 16.305,10.457 22.122,6.609C22.534,6.334 22.925,6.113 22.993,6.113C23.078,6.113 23.342,6.345 23.88,6.878C24.434,7.427 24.698,7.649 24.809,7.67C24.978,7.701 25.099,7.633 25.194,7.448C25.242,7.358 26.166,3.352 26.498,1.774C26.62,1.214 26.493,0.987 26.065,0.998C25.955,1.003 24.593,1.314 23.041,1.7Z"/>
+        <path d="M20.043,10.158C19.716,10.321 19.478,10.633 19.399,11.007C19.362,11.176 19.346,13.325 19.357,17.384L19.373,23.507L19.489,23.723C19.552,23.84 19.679,24.008 19.774,24.104C20.117,24.441 20.075,24.436 23.258,24.42L26.14,24.404L26.398,24.246C26.557,24.146 26.715,23.987 26.815,23.829L26.974,23.57L26.99,17.294L27,11.018L26.889,10.759C26.768,10.474 26.504,10.21 26.229,10.094C26.087,10.036 25.501,10.02 23.184,10.02H20.317L20.043,10.158Z"/>
+        <path d="M11.232,13.345C11.11,13.371 10.941,13.429 10.857,13.471C10.635,13.588 10.345,13.936 10.276,14.184C10.229,14.332 10.213,15.63 10.213,18.919C10.213,23.369 10.218,23.458 10.324,23.691C10.466,24.007 10.609,24.155 10.925,24.303L11.189,24.43H14.04C17.223,24.43 17.117,24.44 17.481,24.055C17.861,23.654 17.84,23.934 17.856,19.151C17.867,16.786 17.856,14.701 17.84,14.522C17.788,14.036 17.561,13.683 17.159,13.477L16.843,13.318L14.151,13.308C12.667,13.302 11.353,13.324 11.232,13.345Z"/>
+        <path d="M1.906,16.38C1.463,16.538 1.167,16.892 1.083,17.367C1.046,17.562 1.03,18.702 1.04,20.56C1.056,23.77 1.046,23.664 1.415,24.055C1.779,24.44 1.674,24.43 4.857,24.43H7.707L7.971,24.303C8.288,24.155 8.43,24.007 8.573,23.691C8.678,23.458 8.684,23.358 8.684,20.365C8.684,16.897 8.699,17.05 8.288,16.654C7.929,16.306 7.887,16.301 4.836,16.301C2.634,16.306 2.07,16.322 1.906,16.38Z"/>
+      </svg>
+      <span>Cronograma & Tareas</span>
+      <span class="tab-badge-count" id="pendingTasksBadge">1</span>
+    </button>
+    <button class="tab-nav-btn" data-screen="plansScreen">
+      <svg viewBox="0 0 24 24" class="nav-tab-icon" width="20" height="20">
+        <path d="M2,1C0.895,1 0,1.895 0,3V20.6C0,21.705 0.895,22.6 2,22.6H22C23.105,22.6 24,21.705 24,20.6V3C24,1.895 23.105,1 22,1H2ZM4.8,5.799C4.138,5.799 3.6,6.336 3.6,6.999C3.6,7.662 4.138,8.199 4.8,8.199H19.2C19.863,8.199 20.4,7.662 20.4,6.999C20.4,6.336 19.863,5.799 19.2,5.799H4.8ZM3.6,11.799C3.6,11.137 4.138,10.599 4.8,10.599H19.2C19.863,10.599 20.4,11.137 20.4,11.799C20.4,12.462 19.863,12.999 19.2,12.999H4.8C4.138,12.999 3.6,12.462 3.6,11.799ZM4.8,15.399C4.138,15.399 3.6,15.936 3.6,16.599C3.6,17.262 4.138,17.799 4.8,17.799H19.2C19.863,17.799 20.4,17.262 20.4,16.599C20.4,15.936 19.863,15.399 19.2,15.399H4.8Z"/>
+      </svg>
+      <span>Mis Rutinas</span>
+    </button>
+    <button class="tab-nav-btn" data-screen="catalogScreen">
+      <svg viewBox="0 0 36 24" class="nav-tab-icon" width="20" height="20">
+        <path d="M32.238,6.85C31.807,6.576 31.553,6.518 30.68,6.506L29.847,6.494V6.087C29.843,5.864 29.788,5.528 29.718,5.34C29.608,5.042 29.545,4.948 29.236,4.647C28.673,4.091 28.43,4.005 27.323,4.009C26.744,4.009 26.321,4.048 26.153,4.107C25.761,4.256 25.354,4.553 25.151,4.851C24.783,5.383 24.775,5.485 24.764,8.423L24.76,11.198H10.946L10.942,8.423C10.934,5.465 10.923,5.375 10.543,4.831C10.324,4.518 9.976,4.264 9.565,4.119C9.389,4.052 8.97,4.009 8.453,4.001C7.326,3.986 7.021,4.088 6.466,4.643C5.988,5.128 5.875,5.383 5.863,6.044L5.851,6.494L5.014,6.502C4.043,6.51 3.699,6.604 3.237,6.995C2.92,7.265 2.662,7.672 2.564,8.059C2.533,8.177 2.505,8.932 2.501,9.734L2.49,11.194L1.735,11.198C0.944,11.206 0.737,11.249 0.455,11.444C-0.152,11.863 -0.152,12.92 0.455,13.338C0.737,13.534 0.944,13.577 1.735,13.585L2.49,13.589L2.501,15.048C2.505,15.851 2.533,16.606 2.564,16.723C2.662,17.111 2.92,17.518 3.237,17.788C3.699,18.179 4.043,18.273 5.014,18.281L5.855,18.285L5.863,18.691C5.859,18.915 5.914,19.243 5.969,19.423C6.062,19.713 6.113,19.787 6.466,20.139C7.025,20.699 7.334,20.797 8.453,20.781C8.946,20.773 9.396,20.73 9.549,20.672C9.933,20.531 10.324,20.249 10.543,19.944C10.923,19.416 10.934,19.318 10.942,16.359L10.946,13.585H24.76V16.285C24.76,19.188 24.783,19.4 25.159,19.916C25.632,20.57 26.2,20.793 27.374,20.785C28.43,20.777 28.696,20.683 29.24,20.139C29.585,19.795 29.643,19.713 29.741,19.427C29.8,19.251 29.851,18.919 29.855,18.695L29.851,18.285L30.692,18.281C31.662,18.273 32.007,18.179 32.469,17.788C32.785,17.518 33.044,17.111 33.142,16.723C33.173,16.606 33.2,15.851 33.204,15.048L33.216,13.589L33.971,13.585C34.762,13.577 34.969,13.534 35.251,13.338C35.857,12.92 35.857,11.863 35.251,11.444C34.969,11.249 34.762,11.206 33.971,11.198L33.216,11.194L33.208,9.73C33.2,8.173 33.157,7.895 32.817,7.406C32.598,7.085 32.578,7.065 32.238,6.85Z"/>
+      </svg>
+      <span>Catálogo de Ejercicios</span>
+    </button>
+    <button class="tab-nav-btn" data-screen="progressScreen">
+      <svg viewBox="0 0 24 24" class="nav-tab-icon" width="20" height="20">
+        <path d="M11.201,0.066C10.511,0.216 10.019,0.497 9.531,1.018C8.621,1.98 8.424,3.462 9.052,4.653C9.306,5.132 9.864,5.685 10.356,5.938C10.882,6.211 11.238,6.295 11.834,6.295C12.734,6.295 13.419,6.009 14.062,5.366C14.681,4.752 14.977,4.039 14.977,3.157C14.977,2.266 14.686,1.576 14.038,0.929C13.71,0.601 13.555,0.483 13.236,0.333C12.584,0.019 11.848,-0.08 11.201,0.066Z M4,6.154C3.578,6.271 3.273,6.529 3.104,6.914C2.889,7.402 3.015,8.021 3.409,8.377C3.517,8.476 4.488,9.048 5.59,9.658C6.984,10.432 7.654,10.826 7.828,10.985C8.274,11.393 8.503,12.045 8.41,12.636C8.386,12.791 7.931,15.08 7.401,17.726C6.871,20.371 6.44,22.599 6.44,22.679C6.44,23.209 6.885,23.791 7.401,23.941C7.734,24.039 8.091,24.011 8.386,23.87C8.818,23.664 8.897,23.519 10.098,20.868C10.713,19.513 11.247,18.35 11.29,18.279C11.384,18.106 11.632,17.96 11.834,17.96C12.035,17.96 12.284,18.106 12.378,18.279C12.42,18.35 12.955,19.513 13.569,20.868C14.77,23.519 14.85,23.664 15.281,23.87C15.577,24.011 15.933,24.039 16.267,23.941C16.782,23.791 17.228,23.209 17.228,22.679C17.228,22.599 16.787,20.32 16.248,17.608C15.708,14.902 15.253,12.599 15.234,12.496C15.164,12.026 15.436,11.351 15.84,10.985C16.013,10.826 16.684,10.432 18.077,9.658C19.179,9.048 20.15,8.476 20.258,8.377C20.938,7.758 20.737,6.599 19.883,6.229C19.447,6.041 19.39,6.051 16.135,6.979C14.489,7.453 12.96,7.866 12.734,7.903C12.214,7.988 11.454,7.988 10.933,7.903C10.708,7.866 9.188,7.458 7.556,6.993C5.924,6.524 4.502,6.135 4.399,6.121C4.296,6.107 4.118,6.126 4,6.154Z"/>
+      </svg>
+      <span>Mi Cuerpo & Medidas</span>
+    </button>
+    <button class="tab-nav-btn" data-screen="coachScreen" id="coachTabBtn" style="display: none;">
+      <svg viewBox="0 0 24 24" class="nav-tab-icon" width="20" height="20">
+        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
+      </svg>
+      <span>Panel Coach</span>
+    </button>
+  </nav>
+
+  <!-- Main Viewport -->
+  <main class="app-viewport">
+
+    <!-- Compact WhatsApp-style Push Notification Permission Bar (Mobile PWA & Desktop) -->
+    <div class="notif-permission-bar" id="notifPermissionBanner" style="display: none;">
+      <div class="notif-bar-left">
+        <div class="notif-bar-icon-wrap">
+          <svg viewBox="0 0 24 24" class="notif-bell-svg">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+          </svg>
+        </div>
+        <div class="notif-bar-info">
+          <div class="notif-bar-title">Alertas Móvil & PC</div>
+          <div class="notif-bar-desc">Avisos de nuevas rutinas y mensajes del Coach.</div>
+        </div>
+      </div>
+      <div class="notif-bar-actions">
+        <button type="button" class="btn-enable-notif" id="enableNotificationsBtn" onclick="if(window.NotificationManager) window.NotificationManager.requestPermission()" title="Activar notificaciones">
+          <svg viewBox="0 0 24 24" class="btn-notif-icon"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          <span>Activar</span>
+        </button>
+        <button type="button" class="notif-bar-dismiss-btn" id="dismissNotifBannerBtn" onclick="const b=document.getElementById('notifPermissionBanner'); if(b){b.classList.add('banner-hidden'); b.style.setProperty('display','none','important');} localStorage.setItem('topgym_notif_banner_dismissed','true'); sessionStorage.setItem('topgym_notif_banner_dismissed','true');" title="Ocultar aviso">&times;</button>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN 1: CRONOGRAMA & TAREAS ASIGNADAS (STUDENT VIEW)       -->
+    <!-- ============================================================ -->
+    <section class="screen-view active" id="scheduleScreen">
+      
+      <!-- Coach Announcement Card -->
+      <div class="coach-announcement-card" id="coachBanner">
+        <div class="coach-announcement-info">
+          <img src="./GYMTOP/resources/res/drawable/img_bg_inspiration_phrase_screen_default_1.jpg" alt="Coach Humberto Salinas" class="coach-avatar-bubble">
+          <div class="coach-announcement-text">
+            <h3>Mensaje de tu Coach: Humberto Salinas</h3>
+            <p id="coachWelcomeMsg">"Tienes 1 nueva sesión asignada como tarea en tu cronograma. Revisa la técnica oficial antes de comenzar."</p>
+          </div>
+        </div>
+        <button class="btn-primary" id="startTodayTaskBtn">
+          <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+          <span>Entrenar Hoy</span>
+        </button>
+      </div>
+
+      <!-- Schedule Week Header -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;">Cronograma Semanal</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Sesiones programadas con animaciones guiadas paso a paso</p>
+        </div>
+        <button class="btn-secondary" id="refreshScheduleBtn" type="button" title="Sincronizar cronograma con el servidor">
+          <svg viewBox="0 0 24 24" class="refresh-icon" style="width: 14px; height: 14px; fill: currentColor;"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+          <span>Sincronizar</span>
+        </button>
+      </div>
+
+      <!-- Interactive 7-Day Week Selector -->
+      <div class="schedule-week-bar" id="weekBarContainer">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Scheduled Tasks Grid -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 0 0.8rem 0;">
+        <h3 style="font-size: 1.2rem; font-weight: 800;">Tareas de Entrenamiento Asignadas</h3>
+        <span class="task-badge badge-pending" id="taskStatusCounter">
+          <svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:currentColor;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+          <span id="taskStatusText">1 Pendiente</span>
+        </span>
+      </div>
+
+      <!-- Modality Filter for Scheduled Workouts / Tareas -->
+      <div class="filter-pills-bar" id="scheduleModalityFilterBar">
+        <button class="role-btn active schedule-filter-btn" data-filter="all">
+          <svg viewBox="0 0 24 24" class="pill-icon"><path d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5V5zm9-2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6zm5 6h-4V5h4v4zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5v-4zm9 6h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4h-4v-4z"/></svg>
+          <span class="txt-full">Todas las Sesiones</span>
+          <span class="txt-mob">Todas</span>
+        </button>
+        <button class="role-btn schedule-filter-btn" data-filter="home">
+          <svg viewBox="0 0 24 24" class="pill-icon"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span class="txt-full">En Casa (Sin Máquinas)</span>
+          <span class="txt-mob">En Casa</span>
+        </button>
+        <button class="role-btn schedule-filter-btn" data-filter="machine">
+          <svg viewBox="0 0 24 24" class="pill-icon"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.45.17-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          <span class="txt-full">Con Máquinas & Poleas</span>
+          <span class="txt-mob">Máquinas</span>
+        </button>
+        <button class="role-btn schedule-filter-btn" data-filter="freeweight">
+          <svg viewBox="0 0 24 24" class="pill-icon"><path d="M5 9a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h1v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2H5zm14-1a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2h1a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-1V8zm-9 3h4v2h-4v-2z"/></svg>
+          <span>Pesas Libres</span>
+        </button>
+      </div>
+
+      <div class="tasks-grid" id="tasksListContainer">
+        <!-- Injected by JavaScript -->
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN 2: RUTINAS & PLANES (GYM WP WORKOUT PLANS)            -->
+    <!-- ============================================================ -->
+    <section class="screen-view" id="plansScreen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 800;">Planes de Entrenamiento</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Filtra por entrenamientos en casa o con máquinas de gimnasio</p>
+        </div>
+        <button class="btn-primary" id="openNewPlanModalBtn">
+          <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          <span>Crear Rutina</span>
+        </button>
+      </div>
+
+      <!-- Filter Bar for Plans: Home vs Machine vs All -->
+      <div class="filter-pills-bar" style="margin-bottom: 1.5rem;" id="plansModalityFilterBar">
+        <button class="role-btn active plan-filter-btn" data-filter="all">
+          <svg viewBox="0 0 24 24" class="pill-icon"><path d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5V5zm9-2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6zm5 6h-4V5h4v4zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5v-4zm9 6h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4h-4v-4z"/></svg>
+          <span>Todos los Planes</span>
+        </button>
+        <button class="role-btn plan-filter-btn" data-filter="home">
+          <svg viewBox="0 0 24 24" class="pill-icon"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span>Entrenamientos en Casa</span>
+        </button>
+        <button class="role-btn plan-filter-btn" data-filter="machine">
+          <svg viewBox="0 0 24 24" class="pill-icon"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.45.17-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          <span>Con Máquinas & Poleas</span>
+        </button>
+        <button class="role-btn plan-filter-btn" data-filter="freeweight">
+          <svg viewBox="0 0 24 24" class="pill-icon"><path d="M5 9a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h1v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2H5zm14-1a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2h1a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-1V8zm-9 3h4v2h-4v-2z"/></svg>
+          <span>Pesas Libres</span>
+        </button>
+      </div>
+
+      <div class="tasks-grid" id="workoutPlansContainer">
+        <!-- Injected by JavaScript -->
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN 3: CATÁLOGO DE EJERCICIOS CON FILTRO CASA / MÁQUINAS  -->
+    <!-- ============================================================ -->
+    <section class="screen-view" id="catalogScreen">
+      <div style="margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 800;">Biblioteca de Ejercicios</h2>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">Filtra según entrenes en casa o con máquinas guiadas</p>
+      </div>
+
+      <!-- Prominent Filter for Home vs Machine -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 0.75rem 1rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+        <span style="display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 800; margin-bottom: 0.5rem;">
+          Modalidad y Equipamiento
+        </span>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="catalogModalityFilterBar">
+          <button class="role-btn active catalog-modality-btn" data-modality="all">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5V5zm9-2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6zm5 6h-4V5h4v4zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5v-4zm9 6h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4h-4v-4z"/></svg>
+            <span>Todos</span>
+          </button>
+          <button class="role-btn catalog-modality-btn" data-modality="home">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>En Casa (Sin Máquinas)</span>
+          </button>
+          <button class="role-btn catalog-modality-btn" data-modality="machine">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.45.17-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            <span>Con Máquina / Polea</span>
+          </button>
+          <button class="role-btn catalog-modality-btn" data-modality="freeweight">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M5 9a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h1v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2H5zm14-1a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2h1a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-1V8zm-9 3h4v2h-4v-2z"/></svg>
+            <span>Pesas Libres</span>
+          </button>
+        </div>
+        <div style="margin-top: 0.85rem; position: relative;">
+          <input type="text" id="exerciseSearchInput" class="form-control" placeholder="Buscar por nombre o equipamiento (ej: polea, prensa, flexiones, crunch, gemelos)..." style="padding-left: 2.4rem; font-size: 0.85rem;">
+          <svg viewBox="0 0 24 24" style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; fill: var(--text-muted); pointer-events: none;"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        </div>
+      </div>
+
+      <!-- Official Category Cover Cards (Gym WP Photos) -->
+      <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.85rem;">Categorías por Músculo</h3>
+      <div class="category-cover-grid" id="categoryCoversContainer">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- Exercises Catalog with Real Animated GIFs -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 800;" id="catalogTitleDisplay">Ejercicios en Movimiento</h3>
+        <span style="font-size: 0.8rem; color: var(--accent-orange); font-weight: 700;" id="catalogCountDisplay">Cargando...</span>
+      </div>
+      <!-- MANIQUI INTERACTIVO -->
+      <div class="interactive-body-wrapper" style="margin-bottom:1rem; background:rgba(18,22,34,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:0.9rem;">
+        <div class="mannequin-view-switch" style="display:flex; gap:.4rem; justify-content:center; margin-bottom:.6rem;">
+          <button type="button" class="mannequin-view-btn active" data-view="front" style="min-width:88px;">Frontal</button>
+          <button type="button" class="mannequin-view-btn" data-view="back" style="min-width:88px;">Trasera</button>
+        </div>
+        <div class="anatomy-mannequin-stage catalog-mannequin-stage" id="catalogMannequinStage">
+          <div class="mannequin-view catalog-front-view" id="catalogFrontView" style="position:absolute; inset:0;">
+            <img src="./GYMTOP/resources/res/drawable/frente_base.png" alt="Mannequin" class="anatomy-mannequin-base">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm1.png" alt="Pectoral" class="anatomy-muscle-layer active" id="catLayerChest">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm4.png" alt="Abdomen" class="anatomy-muscle-layer" id="catLayerAbs">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm2.png" alt="Biceps" class="anatomy-muscle-layer" id="catLayerArms">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm3.png" alt="Antebrazos" class="anatomy-muscle-layer" id="catLayerForearms">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm0.png" alt="Hombros" class="anatomy-muscle-layer" id="catLayerShoulders">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm6.png" alt="Cuadriceps" class="anatomy-muscle-layer" id="catLayerLegs">
+            <div class="anatomy-hotspot catalog-hotspot hotspot-chest" data-catalog-zone="chest" title="Pecho"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-abs" data-catalog-zone="abs" title="Abdomen"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-arms-l" data-catalog-zone="arms" title="Brazos"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-arms-r" data-catalog-zone="arms" title="Brazos"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-forearms-l" data-catalog-zone="forearms" title="Antebrazos"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-forearms-r" data-catalog-zone="forearms" title="Antebrazos"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-shoulders" data-catalog-zone="shoulders" title="Hombros"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-legs" data-catalog-zone="legs" title="Piernas"></div>
+          </div>
+          <div class="mannequin-view catalog-back-view" id="catalogBackView" style="position:absolute; inset:0; display:none;">
+            <img src="./GYMTOP/resources/res/drawable/tras_base.png" alt="Mannequin Back" class="anatomy-mannequin-base">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm9.png" alt="Trapecio" class="anatomy-muscle-layer back-layer shoulders">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm0.png" alt="Deltoides posterior" class="anatomy-muscle-layer back-layer shoulders">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm10.png" alt="Espalda alta" class="anatomy-muscle-layer back-layer back">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm11.png" alt="Dorsal ancho" class="anatomy-muscle-layer back-layer back">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm2.png" alt="Espalda medial" class="anatomy-muscle-layer back-layer back">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm5.png" alt="Romboides" class="anatomy-muscle-layer back-layer back">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm3.png" alt="Lumbar" class="anatomy-muscle-layer back-layer back">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm12.png" alt="Espalda baja" class="anatomy-muscle-layer back-layer back">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm13.png" alt="Erectores" class="anatomy-muscle-layer back-layer back">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm7.png" alt="Erectores profundos" class="anatomy-muscle-layer back-layer back">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm14.png" alt="Gluteos" class="anatomy-muscle-layer back-layer glutes">
+            <img src="./GYMTOP/resources/res/drawable/tras_gm15.png" alt="Isquiotibiales" class="anatomy-muscle-layer back-layer legs">
+            <div class="anatomy-hotspot catalog-hotspot hotspot-back-shoulders" data-catalog-zone="shoulders" title="Hombros"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-back-back" data-catalog-zone="back" title="Espalda"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-back-glutes" data-catalog-zone="glutes" title="Gluteos"></div>
+            <div class="anatomy-hotspot catalog-hotspot hotspot-back-legs" data-catalog-zone="legs" title="Piernas"></div>
+          </div>
+        </div>
+        <div style="text-align:center; font-size:0.78rem; color:var(--text-muted); margin-top:0.5rem; font-weight:600;">Toca un musculo para ver sus ejercicios</div>
+      </div>
+      <div class="exercise-catalog-grid" id="exerciseCatalogContainer">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN 4: PROGRESO Y CUERPO (ANATOMÍA Y BÁSCULA GYM WP)     -->
+    <!-- ============================================================ -->
+    <section class="screen-view" id="progressScreen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 800;">Mi Cuerpo & Medidas</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Mapa anatómico y seguimiento antropométrico</p>
+        </div>
+        <button class="btn-primary" id="openAddMeasureModalBtn">
+          <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          <span>Registrar Peso</span>
+        </button>
+      </div>
+
+      <!-- Student Profile Hero Card with Instant Avatar Customization -->
+      <div class="student-profile-hero-card" id="studentProfileHeroCard">
+        <div class="student-hero-avatar-wrap">
+          <img src="./GYMTOP/resources/res/drawable/im_comentario_4.jpg" alt="Avatar" class="student-hero-avatar" id="progressHeroAvatar">
+          <button class="student-avatar-edit-badge" id="editHeroAvatarBtn" title="Cambiar mi foto de perfil">
+            <svg viewBox="0 0 24 24" style="width: 13px; height: 13px; fill: #fff;"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>
+          </button>
+        </div>
+        <div class="student-hero-info">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 2px;" id="progressHeroName">Mateo Gómez</h3>
+              <p style="font-size: 0.8rem; color: var(--accent-orange); font-weight: 700; margin: 0;" id="progressHeroGoal">Hipertrofia & Fuerza</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.75rem; margin-top: 0.45rem; font-size: 0.76rem; color: var(--text-secondary); flex-wrap: wrap; align-items: center;">
+            <span id="progressHeroModality" style="color: #4ade80; font-weight: 700;">En Casa</span>
+            <span style="color: var(--text-muted);">•</span>
+            <span id="progressHeroDistrict" style="font-weight: 600;">Miraflores</span>
+            <span style="color: var(--text-muted);">•</span>
+            <span id="progressHeroAge">24 años</span>
+            <span style="color: var(--text-muted);">•</span>
+            <span id="progressHeroPhone">+57 300 123 4567</span>
+            <span style="color: var(--text-muted);">•</span>
+            <span id="progressHeroWeight">76.5 kg</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Official Human Anatomy Map & Stats Container -->
+      <div class="body-map-container">
+        <!-- Interactive Anatomy Hub (Muñeco con Utilidad Práctica) -->
+        <div class="interactive-anatomy-hub" id="interactiveAnatomyHub">
+          <!-- Mode Tabs: Recuperación vs Medidas -->
+          <div class="anatomy-mode-tabs">
+            <button type="button" class="anatomy-mode-tab-btn active" data-mode="muscles" id="tabModeMuscles">
+              <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+              <span>Recuperación Muscular</span>
+            </button>
+            <button type="button" class="anatomy-mode-tab-btn" data-mode="measures" id="tabModeMeasures">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              <span>Medidas Corporales</span>
+            </button>
+          </div>
+
+          <!-- Muscle Selector Chips -->
+          <div class="anatomy-muscle-chips-bar" id="anatomyMuscleChipsBar">
+            <button type="button" class="anatomy-chip active" data-muscle="chest">Pecho</button>
+            <button type="button" class="anatomy-chip" data-muscle="abs">Core</button>
+            <button type="button" class="anatomy-chip" data-muscle="arms">Brazos</button>
+            <button type="button" class="anatomy-chip" data-muscle="shoulders">Hombros</button>
+            <button type="button" class="anatomy-chip" data-muscle="legs">Piernas</button>
+          </div>
+
+          <!-- Mannequin Stage with Layered Muscle Overlays and Pins -->
+          <div class="anatomy-mannequin-stage" id="anatomyMannequinStage">
+            <img src="./GYMTOP/resources/res/drawable/frente_base.png" alt="Maniquí Anatómico" class="anatomy-mannequin-base">
+            
+            <!-- Layered Glowing Muscles (Authentic Gym WP Assets) -->
+            <img src="./GYMTOP/resources/res/drawable/frente_gm1.png" alt="Pectoral" class="anatomy-muscle-layer active" id="muscleLayerChest">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm4.png" alt="Abdomen" class="anatomy-muscle-layer" id="muscleLayerAbs">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm2.png" alt="Bíceps" class="anatomy-muscle-layer" id="muscleLayerArms">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm3.png" alt="Antebrazos" class="anatomy-muscle-layer" id="muscleLayerForearms">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm0.png" alt="Hombros" class="anatomy-muscle-layer" id="muscleLayerShoulders">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm6.png" alt="Cuádriceps" class="anatomy-muscle-layer" id="muscleLayerLegs">
+
+            <!-- Interactive Clickable Touch Hotspots -->
+            <div class="anatomy-hotspot hotspot-chest" data-muscle="chest" title="Tocar Pectoral"></div>
+            <div class="anatomy-hotspot hotspot-abs" data-muscle="abs" title="Tocar Core / Abdomen"></div>
+            <div class="anatomy-hotspot hotspot-arms-l" data-muscle="arms" title="Tocar Brazos"></div>
+            <div class="anatomy-hotspot hotspot-arms-r" data-muscle="arms" title="Tocar Brazos"></div>
+            <div class="anatomy-hotspot hotspot-forearms-l" data-muscle="arms" title="Tocar Antebrazos"></div>
+            <div class="anatomy-hotspot hotspot-forearms-r" data-muscle="arms" title="Tocar Antebrazos"></div>
+            <div class="anatomy-hotspot hotspot-shoulders" data-muscle="shoulders" title="Tocar Hombros"></div>
+            <div class="anatomy-hotspot hotspot-legs" data-muscle="legs" title="Tocar Piernas"></div>
+
+            <!-- Anthropometric Measurement Pins (Shown in measures mode) -->
+            <div class="body-measure-pin pin-chest" id="pinChest" data-measure="chest" title="Clic para actualizar medida de Pecho">
+              <span class="pin-dot"></span>
+              <span class="pin-label">Pecho: <strong id="pinValChest">104 cm</strong></span>
+            </div>
+            <div class="body-measure-pin pin-arm" id="pinArm" data-measure="arm" title="Clic para actualizar medida de Brazo">
+              <span class="pin-dot"></span>
+              <span class="pin-label">Brazo: <strong id="pinValArm">38 cm</strong></span>
+            </div>
+            <div class="body-measure-pin pin-waist" id="pinWaist" data-measure="waist" title="Clic para actualizar medida de Cintura">
+              <span class="pin-dot"></span>
+              <span class="pin-label">Cintura: <strong id="pinValWaist">81.5 cm</strong></span>
+            </div>
+            <div class="body-measure-pin pin-thigh" id="pinThigh" data-measure="thigh" title="Clic para actualizar medida de Pierna">
+              <span class="pin-dot"></span>
+              <span class="pin-label">Pierna: <strong id="pinValThigh">58 cm</strong></span>
+            </div>
+          </div>
+
+          <!-- Active Muscle Status & Quick Action Card -->
+          <div class="anatomy-muscle-status-card" id="anatomyMuscleStatusCard">
+            <div class="muscle-status-header">
+              <div>
+                <strong id="anatomySelectedMuscleName" style="font-size: 0.92rem;">Pectoral Mayor</strong>
+                <span id="anatomySelectedMuscleSubtitle" style="display: block; font-size: 0.72rem; color: #4ade80;">Recuperado (95% - Óptimo para entrenar)</span>
+              </div>
+              <button type="button" class="btn-train-muscle" id="trainSelectedMuscleBtn">
+                <span>Ver Ejercicios</span>
+                <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+              </button>
+            </div>
+            <div class="muscle-recovery-meter">
+              <div class="recovery-fill" id="anatomyRecoveryFill" style="width: 95%;"></div>
+            </div>
+            <div class="muscle-stats-mini">
+              <span>Series semana: <strong id="anatomyMuscleSeries">14 series</strong></span>
+              <span>Última sesión: <strong id="anatomyMuscleLastDate">Ayer</strong></span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="body-stats-column">
+          <!-- Weight Card with Official Scale Icon -->
+          <div class="body-stat-card">
+            <div class="body-stat-icon-box weight-box">
+              <img src="./GYMTOP/resources/res/drawable-xxhdpi/im_balanca_80dp.png" alt="Báscula" class="body-stat-icon-img">
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Peso Actual</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--accent-orange);" id="currentWeightDisplay">76.5 <span style="font-size: 1rem; color: var(--text-secondary);">kg</span></h3>
+              <p style="font-size: 0.78rem; color: #4ade80;">↓ 1.3 kg en el último mes</p>
+            </div>
+          </div>
+
+          <!-- Volume Card -->
+          <div class="body-stat-card">
+            <div class="body-stat-icon-box volume-box">
+              <img src="./GYMTOP/resources/res/drawable-xxhdpi/im_halter_logo.png" alt="Carga" class="body-stat-icon-img">
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Volumen Total Levantado</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--accent-blue);" id="totalVolumeDisplay">42,800 <span style="font-size: 1rem; color: var(--text-secondary);">kg</span></h3>
+              <p style="font-size: 0.78rem; color: var(--text-secondary);">Carga acumulada en entrenamientos</p>
+            </div>
+          </div>
+
+          <!-- Streak Card -->
+          <div class="body-stat-card">
+            <div class="body-stat-icon-box streak-box">
+              <svg viewBox="0 0 24 24" class="streak-fire-icon" aria-hidden="true">
+                <defs>
+                  <linearGradient id="streakFireGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#FFE082" />
+                    <stop offset="35%" stop-color="#FF9100" />
+                    <stop offset="100%" stop-color="#FF3D00" />
+                  </linearGradient>
+                  <linearGradient id="streakCoreGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF" />
+                    <stop offset="50%" stop-color="#FFF59D" />
+                    <stop offset="100%" stop-color="#FFB74D" />
+                  </linearGradient>
+                </defs>
+                <path fill="url(#streakFireGrad)" d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.61 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
+                <path fill="url(#streakCoreGrad)" d="M11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
+              </svg>
+            </div>
+            <div>
+              <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Racha Activa</span>
+              <h3 style="font-size: 1.8rem; font-weight: 900; color: var(--accent-orange);" id="streakDisplay">3 <span style="font-size: 1rem; color: var(--text-secondary);">Días seguidos</span></h3>
+              <p style="font-size: 0.78rem; color: #ffd180;">¡Consistencia impecable!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Table -->
+      <div class="task-card" style="padding: 1.5rem;">
+        <h4 style="margin-bottom: 1rem; font-size: 1.1rem;">Historial de Pesajes & Medidas</h4>
+        <div style="overflow-x: auto;">
+          <table class="measurements-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="width: 22%; text-align: center;">Fecha</th>
+                <th style="width: 20%; text-align: center;">Peso (kg)</th>
+                <th style="width: 19%; text-align: center;">Pecho (cm)</th>
+                <th style="width: 19%; text-align: center;">Brazo (cm)</th>
+                <th style="width: 20%; text-align: center;">Cintura (cm)</th>
+              </tr>
+            </thead>
+            <tbody id="measurementsHistoryTable">
+              <!-- Injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SCREEN 5: PANEL DEL ENTRENADOR / COACH                       -->
+    <!-- ============================================================ -->
+    <section class="screen-view" id="coachScreen">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 800;">Panel de Control del Entrenador</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Supervisa entregas con mensajes, gestiona alumnos y asigna rutinas personalizadas</p>
+        </div>
+        <div class="coach-header-actions" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button class="btn-primary" id="openRegisterStudentModalBtn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); display: inline-flex; align-items: center; gap: 0.5rem;">
+            <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span>Registrar Nuevo Alumno</span>
+          </button>
+          <button class="btn-primary btn-coach" id="openAssignTaskModalBtn" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+            <span>Asignar Tarea a Alumno</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Coach Section Tabs Navigation -->
+      <div class="coach-tabs-nav" id="coachSectionTabsNav" style="margin-bottom: 1.5rem;">
+        <button type="button" class="coach-tab-nav-btn active" data-coach-tab="inbox" id="coachTabInboxBtn" onclick="if(window.switchCoachTab) window.switchCoachTab('inbox')">
+          <svg viewBox="0 0 24 24" class="coach-tab-svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          <span class="coach-tab-label">
+            <span class="txt-full">Bandeja de Entregas & Mensajes</span>
+            <span class="txt-mob">Bandeja</span>
+          </span>
+          <span class="coach-tab-badge" id="coachInboxTabBadge">0</span>
+        </button>
+        <button type="button" class="coach-tab-nav-btn" data-coach-tab="students" id="coachTabStudentsBtn" onclick="if(window.switchCoachTab) window.switchCoachTab('students')">
+          <svg viewBox="0 0 24 24" class="coach-tab-svg"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          <span class="coach-tab-label">
+            <span class="txt-full">Alumnos Registrados</span>
+            <span class="txt-mob">Alumnos</span>
+          </span>
+          <span class="coach-tab-badge" id="coachStudentsTabBadge">0</span>
+        </button>
+        <button type="button" class="coach-tab-nav-btn" data-coach-tab="tasks" id="coachTabTasksBtn" onclick="if(window.switchCoachTab) window.switchCoachTab('tasks')">
+          <svg viewBox="0 0 24 24" class="coach-tab-svg"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span class="coach-tab-label">
+            <span class="txt-full">Supervisión de Tareas</span>
+            <span class="txt-mob">Tareas</span>
+          </span>
+          <span class="coach-tab-badge" id="coachTasksTabBadge">0</span>
+        </button>
+      </div>
+
+      <!-- VIEW 1: BANDEJA DE ENTRADA DE ENTREGAS & MENSAJES DE ALUMNOS -->
+      <div id="coachDeliveriesInboxSection" class="coach-view-section active">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: #00b0ff;"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              <span>Bandeja de Entregas & Mensajes de Alumnos</span>
+            </h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block;" id="coachInboxSubtitle">
+              Buzón en vivo: revisa quién completó su rutina, sus observaciones y esfuerzo percibido (RPE)
+            </span>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <span class="dropdown-notif-counter" id="coachInboxCompletedCountPill" style="background: #10b981; font-size: 0.75rem; padding: 4px 10px;">0 entregadas</span>
+          </div>
+        </div>
+
+        <!-- Filter Pills Bar for Inbox -->
+        <div class="filter-pills-bar" id="coachInboxFilterBar" style="margin-bottom: 1.25rem;">
+          <button class="role-btn active coach-inbox-filter-btn" data-inbox-filter="all">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5V5zm9-2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6zm5 6h-4V5h4v4zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5v-4zm9 6h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4h-4v-4z"/></svg>
+            <span class="txt-full">Todas las Entregas</span>
+            <span class="txt-mob">Todas</span>
+          </button>
+          <button class="role-btn coach-inbox-filter-btn" data-inbox-filter="with_message">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+            <span class="txt-full">Con Mensaje del Alumno</span>
+            <span class="txt-mob">Con Mensajes</span>
+          </button>
+          <button class="role-btn coach-inbox-filter-btn" data-inbox-filter="pending">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            <span class="txt-full">En Entrenamiento (Pendientes)</span>
+            <span class="txt-mob">Pendientes</span>
+          </button>
+        </div>
+
+        <div class="inbox-carousel-wrapper">
+          <div class="tasks-grid inbox-carousel-track" id="coachDeliveriesInboxContainer">
+            <!-- Injected by JavaScript -->
+          </div>
+
+          <!-- Carousel Controls & Pagination Dots (iPod Style) -->
+          <div class="inbox-carousel-nav-bar" id="coachInboxCarouselNav" style="display: none;">
+            <button type="button" class="carousel-nav-arrow-btn" id="coachInboxPrevBtn" aria-label="Entrega anterior" title="Entrega anterior">
+              <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </button>
+            
+            <div class="carousel-dots-indicator" id="coachInboxCarouselDots">
+              <!-- Dots dynamically populated by JS -->
+            </div>
+
+            <button type="button" class="carousel-nav-arrow-btn" id="coachInboxNextBtn" aria-label="Siguiente entrega" title="Siguiente entrega">
+              <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+
+            <span class="carousel-counter-badge" id="coachInboxCarouselCounter">1 / 1</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: BASE DE DATOS DE ALUMNOS REGISTRADOS -->
+      <div id="coachStudentsSection" class="coach-view-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: var(--accent-orange);"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              <span>Base de Datos de Alumnos</span>
+            </h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block;" id="coachDbStudentCounter">Perfiles registrados con acceso y credenciales</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <input type="text" id="searchStudentsDbInput" class="form-control" placeholder="Buscar alumno en la base de datos por nombre, WhatsApp o modalidad..." style="border-radius: var(--radius-full); padding: 0.6rem 1.1rem; background: var(--bg-card); border-color: rgba(255,255,255,0.12);">
+        </div>
+
+        <div class="tasks-grid" id="coachStudentsContainer">
+          <!-- Injected by JavaScript -->
+        </div>
+      </div>
+
+      <!-- VIEW 3: SUPERVISIÓN DE TAREAS ASIGNADAS -->
+      <div id="coachTasksMonitorSection" class="coach-view-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 800;">Tareas Asignadas & Cumplimiento</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);" id="coachTaskCountBadge">Supervisión en vivo</span>
+        </div>
+
+        <!-- Filter Bar for Coach Tasks: Home vs Machine -->
+        <div class="filter-pills-bar" id="coachTasksFilterBar" style="margin-bottom: 1.25rem;">
+          <button class="role-btn active coach-filter-btn" data-filter="all">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5V5zm9-2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6zm5 6h-4V5h4v4zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4H5v-4zm9 6h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm1-6h4v4h-4v-4z"/></svg>
+            <span class="txt-full">Todas las Tareas</span>
+            <span class="txt-mob">Todas</span>
+          </button>
+          <button class="role-btn coach-filter-btn" data-filter="home">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span class="txt-full">Entrenamientos en Casa</span>
+            <span class="txt-mob">En Casa</span>
+          </button>
+          <button class="role-btn coach-filter-btn" data-filter="machine">
+            <svg viewBox="0 0 24 24" class="pill-icon"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.45.17-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            <span class="txt-full">Con Máquinas & Poleas</span>
+            <span class="txt-mob">Máquinas</span>
+          </button>
+        </div>
+
+        <div class="tasks-grid" id="coachTasksMonitorContainer">
+          <!-- Injected by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Navigation (Official Gym WP Tabs with Authentic Drawables) -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-item active" data-screen="scheduleScreen" id="mobileScheduleBtn" style="position: relative;">
+      <svg viewBox="0 0 27 25" class="mobile-nav-icon">
+        <path d="M23.041,1.7C21.489,2.085 20.164,2.423 20.101,2.46C19.937,2.55 19.895,2.761 19.995,2.967C20.037,3.062 20.349,3.399 20.687,3.711C21.315,4.302 21.368,4.371 21.32,4.503C21.283,4.592 20.285,5.247 19.372,5.78C15.181,8.224 10.594,9.924 6.097,10.7C4.54,10.969 3.716,11.059 1.921,11.148L0.66,11.212L0.443,11.365C0.137,11.581 0,11.861 0,12.273C0,12.547 0.026,12.632 0.164,12.827C0.501,13.307 0.834,13.376 2.491,13.291C8.947,12.959 16.305,10.457 22.122,6.609C22.534,6.334 22.925,6.113 22.993,6.113C23.078,6.113 23.342,6.345 23.88,6.878C24.434,7.427 24.698,7.649 24.809,7.67C24.978,7.701 25.099,7.633 25.194,7.448C25.242,7.358 26.166,3.352 26.498,1.774C26.62,1.214 26.493,0.987 26.065,0.998C25.955,1.003 24.593,1.314 23.041,1.7Z"/>
+        <path d="M20.043,10.158C19.716,10.321 19.478,10.633 19.399,11.007C19.362,11.176 19.346,13.325 19.357,17.384L19.373,23.507L19.489,23.723C19.552,23.84 19.679,24.008 19.774,24.104C20.117,24.441 20.075,24.436 23.258,24.42L26.14,24.404L26.398,24.246C26.557,24.146 26.715,23.987 26.815,23.829L26.974,23.57L26.99,17.294L27,11.018L26.889,10.759C26.768,10.474 26.504,10.21 26.229,10.094C26.087,10.036 25.501,10.02 23.184,10.02H20.317L20.043,10.158Z"/>
+        <path d="M11.232,13.345C11.11,13.371 10.941,13.429 10.857,13.471C10.635,13.588 10.345,13.936 10.276,14.184C10.229,14.332 10.213,15.63 10.213,18.919C10.213,23.369 10.218,23.458 10.324,23.691C10.466,24.007 10.609,24.155 10.925,24.303L11.189,24.43H14.04C17.223,24.43 17.117,24.44 17.481,24.055C17.861,23.654 17.84,23.934 17.856,19.151C17.867,16.786 17.856,14.701 17.84,14.522C17.788,14.036 17.561,13.683 17.159,13.477L16.843,13.318L14.151,13.308C12.667,13.302 11.353,13.324 11.232,13.345Z"/>
+        <path d="M1.906,16.38C1.463,16.538 1.167,16.892 1.083,17.367C1.046,17.562 1.03,18.702 1.04,20.56C1.056,23.77 1.046,23.664 1.415,24.055C1.779,24.44 1.674,24.43 4.857,24.43H7.707L7.971,24.303C8.288,24.155 8.43,24.007 8.573,23.691C8.678,23.458 8.684,23.358 8.684,20.365C8.684,16.897 8.699,17.05 8.288,16.654C7.929,16.306 7.887,16.301 4.836,16.301C2.634,16.306 2.07,16.322 1.906,16.38Z"/>
+      </svg>
+      <span>Cronograma</span>
+      <span class="student-bottom-nav-badge" id="studentScheduleNavBadge" style="display: none;">0</span>
+    </button>
+    <button class="mobile-nav-item" data-screen="plansScreen">
+      <svg viewBox="0 0 24 24" class="mobile-nav-icon">
+        <path d="M2,1C0.895,1 0,1.895 0,3V20.6C0,21.705 0.895,22.6 2,22.6H22C23.105,22.6 24,21.705 24,20.6V3C24,1.895 23.105,1 22,1H2ZM4.8,5.799C4.138,5.799 3.6,6.336 3.6,6.999C3.6,7.662 4.138,8.199 4.8,8.199H19.2C19.863,8.199 20.4,7.662 20.4,6.999C20.4,6.336 19.863,5.799 19.2,5.799H4.8ZM3.6,11.799C3.6,11.137 4.138,10.599 4.8,10.599H19.2C19.863,10.599 20.4,11.137 20.4,11.799C20.4,12.462 19.863,12.999 19.2,12.999H4.8C4.138,12.999 3.6,12.462 3.6,11.799ZM4.8,15.399C4.138,15.399 3.6,15.936 3.6,16.599C3.6,17.262 4.138,17.799 4.8,17.799H19.2C19.863,17.799 20.4,17.262 20.4,16.599C20.4,15.936 19.863,15.399 19.2,15.399H4.8Z"/>
+      </svg>
+      <span>Rutinas</span>
+    </button>
+    <button class="mobile-nav-item" data-screen="catalogScreen">
+      <svg viewBox="0 0 36 24" class="mobile-nav-icon">
+        <path d="M32.238,6.85C31.807,6.576 31.553,6.518 30.68,6.506L29.847,6.494V6.087C29.843,5.864 29.788,5.528 29.718,5.34C29.608,5.042 29.545,4.948 29.236,4.647C28.673,4.091 28.43,4.005 27.323,4.009C26.744,4.009 26.321,4.048 26.153,4.107C25.761,4.256 25.354,4.553 25.151,4.851C24.783,5.383 24.775,5.485 24.764,8.423L24.76,11.198H10.946L10.942,8.423C10.934,5.465 10.923,5.375 10.543,4.831C10.324,4.518 9.976,4.264 9.565,4.119C9.389,4.052 8.97,4.009 8.453,4.001C7.326,3.986 7.021,4.088 6.466,4.643C5.988,5.128 5.875,5.383 5.863,6.044L5.851,6.494L5.014,6.502C4.043,6.51 3.699,6.604 3.237,6.995C2.92,7.265 2.662,7.672 2.564,8.059C2.533,8.177 2.505,8.932 2.501,9.734L2.49,11.194L1.735,11.198C0.944,11.206 0.737,11.249 0.455,11.444C-0.152,11.863 -0.152,12.92 0.455,13.338C0.737,13.534 0.944,13.577 1.735,13.585L2.49,13.589L2.501,15.048C2.505,15.851 2.533,16.606 2.564,16.723C2.662,17.111 2.92,17.518 3.237,17.788C3.699,18.179 4.043,18.273 5.014,18.281L5.855,18.285L5.863,18.691C5.859,18.915 5.914,19.243 5.969,19.423C6.062,19.713 6.113,19.787 6.466,20.139C7.025,20.699 7.334,20.797 8.453,20.781C8.946,20.773 9.396,20.73 9.549,20.672C9.933,20.531 10.324,20.249 10.543,19.944C10.923,19.416 10.934,19.318 10.942,16.359L10.946,13.585H24.76V16.285C24.76,19.188 24.783,19.4 25.159,19.916C25.632,20.57 26.2,20.793 27.374,20.785C28.43,20.777 28.696,20.683 29.24,20.139C29.585,19.795 29.643,19.713 29.741,19.427C29.8,19.251 29.851,18.919 29.855,18.695L29.851,18.285L30.692,18.281C31.662,18.273 32.007,18.179 32.469,17.788C32.785,17.518 33.044,17.111 33.142,16.723C33.173,16.606 33.2,15.851 33.204,15.048L33.216,13.589L33.971,13.585C34.762,13.577 34.969,13.534 35.251,13.338C35.857,12.92 35.857,11.863 35.251,11.444C34.969,11.249 34.762,11.206 33.971,11.198L33.216,11.194L33.208,9.73C33.2,8.173 33.157,7.895 32.817,7.406C32.598,7.085 32.578,7.065 32.238,6.85Z"/>
+      </svg>
+      <span>Catálogo</span>
+    </button>
+    <button class="mobile-nav-item" data-screen="progressScreen">
+      <svg viewBox="0 0 24 24" class="mobile-nav-icon">
+        <path d="M11.201,0.066C10.511,0.216 10.019,0.497 9.531,1.018C8.621,1.98 8.424,3.462 9.052,4.653C9.306,5.132 9.864,5.685 10.356,5.938C10.882,6.211 11.238,6.295 11.834,6.295C12.734,6.295 13.419,6.009 14.062,5.366C14.681,4.752 14.977,4.039 14.977,3.157C14.977,2.266 14.686,1.576 14.038,0.929C13.71,0.601 13.555,0.483 13.236,0.333C12.584,0.019 11.848,-0.08 11.201,0.066Z M4,6.154C3.578,6.271 3.273,6.529 3.104,6.914C2.889,7.402 3.015,8.021 3.409,8.377C3.517,8.476 4.488,9.048 5.59,9.658C6.984,10.432 7.654,10.826 7.828,10.985C8.274,11.393 8.503,12.045 8.41,12.636C8.386,12.791 7.931,15.08 7.401,17.726C6.871,20.371 6.44,22.599 6.44,22.679C6.44,23.209 6.885,23.791 7.401,23.941C7.734,24.039 8.091,24.011 8.386,23.87C8.818,23.664 8.897,23.519 10.098,20.868C10.713,19.513 11.247,18.35 11.29,18.279C11.384,18.106 11.632,17.96 11.834,17.96C12.035,17.96 12.284,18.106 12.378,18.279C12.42,18.35 12.955,19.513 13.569,20.868C14.77,23.519 14.85,23.664 15.281,23.87C15.577,24.011 15.933,24.039 16.267,23.941C16.782,23.791 17.228,23.209 17.228,22.679C17.228,22.599 16.787,20.32 16.248,17.608C15.708,14.902 15.253,12.599 15.234,12.496C15.164,12.026 15.436,11.351 15.84,10.985C16.013,10.826 16.684,10.432 18.077,9.658C19.179,9.048 20.15,8.476 20.258,8.377C20.938,7.758 20.737,6.599 19.883,6.229C19.447,6.041 19.39,6.051 16.135,6.979C14.489,7.453 12.96,7.866 12.734,7.903C12.214,7.988 11.454,7.988 10.933,7.903C10.708,7.866 9.188,7.458 7.556,6.993C5.924,6.524 4.502,6.135 4.399,6.121C4.296,6.107 4.118,6.126 4,6.154Z"/>
+      </svg>
+      <span>Cuerpo</span>
+    </button>
+    <button class="mobile-nav-item" data-screen="coachScreen" id="mobileCoachBtn" style="display: none; position: relative;">
+      <svg viewBox="0 0 24 24" class="mobile-nav-icon">
+        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
+      </svg>
+      <span>Coach</span>
+      <span class="coach-bottom-nav-badge" id="coachBottomNavBadge" style="display: none;">0</span>
+    </button>
+  </nav>
+
+  <!-- ============================================================ -->
+  <!-- FULLSCREEN WORKOUT ASSISTANT (AUTHENTIC GYM WP LIVE STAGE)   -->
+  <!-- ============================================================ -->
+  <div class="live-assistant-overlay" id="liveAssistantOverlay">
+    <header class="live-header">
+      <div class="live-header-bar">
+        <button class="btn-secondary btn-live-exit" id="exitLiveWorkoutBtn" title="Salir del entrenamiento">
+          <svg viewBox="0 0 24 24" class="live-header-icon" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          <span>Salir</span>
+        </button>
+
+        <div class="live-session-timer" id="liveElapsedTimer" title="Tiempo de entrenamiento transcurrido">00:00:00</div>
+
+        <button class="btn-primary btn-live-finish" id="finishLiveWorkoutBtn" title="Completar y guardar sesión">
+          <svg viewBox="0 0 24 24" class="live-header-icon" aria-hidden="true"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
+          <span>Finalizar</span>
+        </button>
+      </div>
+
+      <div class="live-header-title-box">
+        <h3 class="live-workout-title" id="liveWorkoutTitle">Torso y Pectoral</h3>
+        <span class="live-workout-subtitle" id="liveWorkoutSubtitle">
+          <span class="live-pulse-dot"></span>
+          <span>Sesión en progreso</span>
+        </span>
+      </div>
+    </header>
+
+    <div class="live-exercise-stage">
+
+      <div class="live-stage-duo-grid">
+        <!-- Real Exercise GIF Stage Player -->
+        <div class="live-gif-stage-card">
+          <div class="gif-wrapper-fluid">
+            <img src="./GYMTOP/resources/res/drawable/im_ex0.gif" alt="Ejercicio en movimiento" class="live-gif-stage-viewer" id="liveCurrentExerciseGif">
+            <span class="live-fluid-tag">HD • Movimiento Continuo</span>
+          </div>
+          <div class="live-gif-stage-info">
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 800;" id="liveStageExerciseName">Press de Banca Plano con Barra</h3>
+              <span style="font-size: 0.8rem; color: var(--text-secondary);" id="liveStageExerciseDetails">Barra Olímpica • Pecho / Pectoral</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn-secondary" id="prevExerciseBtn" title="Ejercicio anterior" style="padding: 0.4rem 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                <img src="./GYMTOP/resources/res/drawable-xxhdpi/ic_previous.png" alt="Anterior" style="width: 14px; height: 14px;">
+                <span>Anterior</span>
+              </button>
+              <button class="btn-secondary" id="nextExerciseBtn" title="Siguiente ejercicio" style="padding: 0.4rem 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                <span>Siguiente</span>
+                <img src="./GYMTOP/resources/res/drawable-xxhdpi/ic_next.png" alt="Siguiente" style="width: 14px; height: 14px;">
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real Authentic Anatomy & Active Muscles Widget -->
+        <div class="live-anatomy-stage-card">
+          <div class="anatomy-card-header">
+            <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: var(--accent-orange); letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 4px;">
+              <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+              <span>Músculo en Acción</span>
+            </span>
+            <span class="anatomy-view-tag" id="liveAnatomyViewTag">Vista Frontal</span>
+          </div>
+
+          <div class="anatomy-muscle-viewer" id="liveStageAnatomyViewer">
+            <img src="./GYMTOP/resources/res/drawable/frente_base.png" alt="Cuerpo Base" class="anatomy-base-layer" id="liveAnatomyBaseImg">
+            <img src="./GYMTOP/resources/res/drawable/frente_gm0.png" alt="Músculo Activo" class="anatomy-overlay-layer" id="liveAnatomyOverlayImg">
+          </div>
+
+          <div class="anatomy-legend-box">
+            <div class="anatomy-badge-pill">
+              <span class="anatomy-dot"></span>
+              <strong id="liveAnatomyPrimaryMuscle">Pectoral Mayor</strong>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;" id="liveAnatomySecondaryMuscle">
+              Secundarios: Tríceps & Deltoides
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radial Rest Timer Widget -->
+      <div class="rest-timer-box" id="restTimerBox">
+        <div class="timer-circle-wrap">
+          <svg class="timer-svg" viewBox="0 0 100 100">
+            <circle class="timer-bg-circle" cx="50" cy="50" r="42"></circle>
+            <circle class="timer-bar-circle" id="timerProgressCircle" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="0"></circle>
+          </svg>
+          <div class="timer-number-display" id="restSecondsDisplay">90s</div>
+        </div>
+
+        <div class="timer-controls-pane">
+          <h4 style="display: flex; align-items: center; gap: 0.55rem;">
+            <div class="timer-header-icon-wrap">
+              <svg viewBox="0 0 24 24" class="timer-pane-icon"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+            </div>
+            <span>Temporizador de Descanso</span>
+          </h4>
+          <p style="font-size: 0.8rem; color: var(--text-secondary);" id="restTimerStatus">Toca una serie para iniciar descanso automático</p>
+          <div class="timer-presets">
+            <button class="timer-btn-preset" data-seconds="30">+30s</button>
+            <button class="timer-btn-preset" data-seconds="60">+60s</button>
+            <button class="timer-btn-preset" data-seconds="90">+90s</button>
+            <button class="timer-btn-preset" data-seconds="120">+120s</button>
+            <button class="timer-btn-preset" id="stopRestTimerBtn" style="color: var(--accent-red);">Detener</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Series Table for current exercise -->
+      <div class="task-card" style="padding: 1.25rem;">
+        <h4 style="font-size: 1.05rem; margin-bottom: 0.85rem;">Series de este Ejercicio</h4>
+        <div id="liveSeriesTableContainer">
+          <!-- Injected by JavaScript -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: ASIGNAR TAREA AL ALUMNO (COACH HUB) CON SELECTOR VISUAL -->
+  <!-- ============================================================ -->
+  <div class="modal-overlay" id="assignTaskModal">
+    <div class="modal-card modal-card-wide" style="max-width: 670px;">
+      <div class="modal-card-inner">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: var(--accent-orange);"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              <span>Asignar Tarea / Rutina al Alumno</span>
+            </h3>
+            <p style="font-size: 0.74rem; color: var(--text-secondary); margin: 3px 0 0 0;">
+              Selecciona la rutina con las gráficas oficiales de la app y define los parámetros específicos del entrenamiento.
+            </p>
+          </div>
+          <button type="button" class="btn-close-modal" id="closeAssignTaskModalBtn">&times;</button>
+        </div>
+
+        <form id="assignTaskForm" novalidate style="margin-top: 1rem;">
+          <!-- 1. Student Selector & Info Badge -->
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label" for="taskStudentSelect" style="font-size: 0.78rem; font-weight: 800;">Seleccionar Alumno Destinatario *</label>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <select class="form-control" id="taskStudentSelect" required style="flex: 1; min-width: 220px;">
+                <!-- Injected by JS -->
+              </select>
+              <div id="taskStudentSelectedBadge" class="task-student-preview-badge">
+                <!-- Shows student avatar & preferred modality -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Visual Routine Selector with App Graphics -->
+          <div class="form-group" style="margin-bottom: 1.15rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 6px;">
+              <label class="form-label" style="margin-bottom: 0; font-size: 0.78rem; font-weight: 800;">
+                Elige la Rutina (Selector Gráfico con Portadas Oficiales) *
+              </label>
+              <!-- Quick Filter Pills for Modality -->
+              <div class="routine-filter-pills" id="routineFilterPills">
+                <button type="button" class="routine-filter-chip active" data-modality="all">Todas</button>
+                <button type="button" class="routine-filter-chip" data-modality="home">🏠 Casa</button>
+                <button type="button" class="routine-filter-chip" data-modality="machine">⚙️ Máquinas</button>
+                <button type="button" class="routine-filter-chip" data-modality="freeweight">🏋️ Pesas Libres</button>
+              </div>
+            </div>
+
+            <!-- Visual Routine Cards Carousel / Grid -->
+            <div class="visual-routine-cards-container" id="visualRoutineCardsContainer">
+              <!-- Rendered dynamically by JS with official cover images, badges, days chips, and selection glow -->
+            </div>
+
+            <!-- Hidden inputs maintaining selected plan and day -->
+            <input type="hidden" id="taskPlanSelectedValue" value="" required>
+            <!-- Hidden filter select for backwards compatibility -->
+            <select class="form-control" id="taskModalityFilterSelect" style="display: none;">
+              <option value="all">Todas las Rutinas</option>
+              <option value="home">Rutinas para Casa (Sin Máquinas)</option>
+              <option value="machine">Rutinas con Máquinas & Poleas</option>
+              <option value="freeweight">Rutinas con Pesas Libres</option>
+            </select>
+            <select class="form-control" id="taskPlanSelect" style="display: none;">
+              <!-- Kept in sync by JS -->
+            </select>
+          </div>
+
+          <!-- 3. Detailed Exercise Breakdown Preview (Specific Assignment) -->
+          <div class="routine-exercises-specific-box" id="routineExercisesSpecificBox" style="display: none;">
+            <div class="specific-box-header">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: var(--accent-orange);"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+                <strong id="specificBoxTitle" style="font-size: 0.82rem;">Desglose Específico de Ejercicios en esta Sesión</strong>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button type="button" id="toggleAllExercisesBtn" class="btn-toggle-all-ex">
+                  Deseleccionar todos
+                </button>
+                <span id="specificExerciseCountBadge" class="badge-counter-pill">0 ejercicios</span>
+              </div>
+            </div>
+            <p style="font-size: 0.72rem; color: var(--text-muted); margin: 4px 0 8px 0;">
+              Selecciona con el check individual cada ejercicio que deseas incluir en esta tarea para el alumno:
+            </p>
+            <div class="specific-exercises-scroll-list" id="specificExercisesScrollList">
+              <!-- Dynamically populated with GIF thumbnail, exercise name, target muscle, sets/reps -->
+            </div>
+          </div>
+
+          <!-- 4. Specific Parameters (Focus / RPE / Rest Time) -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 1rem; margin-bottom: 1rem;">
+            <!-- Training Focus -->
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.75rem; font-weight: 700;">Enfoque / Objetivo de la Sesión</label>
+              <select class="form-control" id="taskFocusSelect" style="font-size: 0.8rem; padding: 0.55rem 0.75rem;">
+                <option value="Hipertrofia Muscular">🔥 Hipertrofia Muscular</option>
+                <option value="Fuerza Máxima">💪 Fuerza Máxima</option>
+                <option value="Definición & Quema Grasa">⚡ Definición & Quema Grasa</option>
+                <option value="Técnica & Adaptación">🎯 Técnica & Adaptación</option>
+                <option value="Resistencia & Cardio">🏃 Resistencia & Cardio</option>
+              </select>
+            </div>
+
+            <!-- Suggested Rest per Set -->
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.75rem; font-weight: 700;">Descanso Sugerido por Serie</label>
+              <select class="form-control" id="taskRestSelect" style="font-size: 0.8rem; padding: 0.55rem 0.75rem;">
+                <option value="45">⏱️ 45 segundos (Rápido)</option>
+                <option value="60">⏱️ 60 segundos (Estándar)</option>
+                <option value="90" selected>⏱️ 90 segundos (Hipertrofia)</option>
+                <option value="120">⏱️ 120 segundos (Fuerza)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 5. Date in Schedule -->
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label" for="taskDateInput" style="font-size: 0.76rem; font-weight: 700;">Fecha en el Cronograma *</label>
+            <input type="date" class="form-control" id="taskDateInput" required>
+          </div>
+
+          <!-- 6. Specific Coach Instructions with Quick Presets -->
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px;">
+              <label class="form-label" for="taskNotesInput" style="font-size: 0.76rem; font-weight: 700; margin-bottom: 0;">
+                Instrucciones y Notas Técnicas del Entrenador
+              </label>
+              <span style="font-size: 0.7rem; color: var(--text-muted);">Sugerencias rápidas:</span>
+            </div>
+            <!-- Quick Coaching Notes Pills -->
+            <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px;" id="taskNotesPresets">
+              <button type="button" class="btn-preset-note" data-note="Enfócate en la fase excéntrica lenta (3 seg) y cuida la postura en cada serie.">Técnica excéntrica lenta</button>
+              <button type="button" class="btn-preset-note" data-note="Llega a 1-2 repeticiones antes del fallo muscular en las últimas dos series.">Cerca del fallo (RIR 1-2)</button>
+              <button type="button" class="btn-preset-note" data-note="Realiza un calentamiento articular previo de 5 minutos antes de la primera serie.">Calentamiento articular</button>
+            </div>
+            <textarea class="form-control" id="taskNotesInput" rows="2" placeholder="Ej: Realiza esta sesión con la técnica indicada y respeta los tiempos de descanso..."></textarea>
+          </div>
+
+          <!-- Actions -->
+          <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.25rem;">
+            <button type="submit" class="btn-primary btn-coach" id="submitAssignTaskBtn" style="width: 100%; justify-content: center; font-weight: 800; display: inline-flex; align-items: center; gap: 7px;">
+              <svg viewBox="0 0 24 24" style="width: 17px; height: 17px; fill: currentColor;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              <span>Asignar Tarea y Notificar al Alumno</span>
+            </button>
+            <button type="button" id="assignTaskNotifyWaBtn" class="btn-whatsapp-assign-action" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; font-weight: 700; font-size: 0.8rem; padding: 0.6rem; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s ease;">
+              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.45 0-2.87-.38-4.12-1.1l-.3-.17-3.12.82.83-3.04-.19-.32c-.82-1.31-1.26-2.83-1.26-4.41 0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08s.89 2.41 1.02 2.58c.13.17 1.76 2.68 4.26 3.76.6.26 1.06.41 1.42.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29z"/></svg>
+              <span>Asignar y Notificar al WhatsApp del Alumno</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: ENTREGAR TAREA Y CELEBRACIÓN CON TROFEO REAL GYM WP  -->
+  <!-- ============================================================ -->
+  <div class="modal-overlay" id="finishWorkoutModal">
+    <div class="modal-card">
+      <div class="modal-card-inner">
+        <div class="modal-header">
+          <h3 class="modal-title">¡Entrenamiento Completado!</h3>
+          <button class="btn-close-modal" id="closeFinishModalBtn">&times;</button>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <div class="finish-trophy-container">
+            <img src="./GYMTOP/resources/res/drawable/im_trophy.png" alt="Trofeo TOP-GYM" id="finishModalTrophyImg" class="finish-modal-trophy-img">
+          </div>
+          <h4 style="font-size: 1.3rem; margin-top: 0.75rem; font-weight: 800;" id="finishModalTitle">¡Sesión Finalizada con Éxito!</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);" id="finishModalSubtitle">Esta sesión será entregada a tu Coach Humberto Salinas</p>
+        </div>
+
+        <div class="finish-stats-box" style="display: flex; justify-content: space-around; background: var(--bg-input); border-radius: var(--radius-sm); padding: 0.75rem; margin-bottom: 1.5rem; text-align: center;">
+          <div>
+            <h5 style="font-size: 1.15rem; font-weight: 800; color: var(--accent-orange);" id="finishTimeSummary">00:42</h5>
+            <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Duración</span>
+          </div>
+          <div>
+            <h5 style="font-size: 1.15rem; font-weight: 800; color: var(--accent-blue);" id="finishVolumeSummary">5,240 kg</h5>
+            <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Volumen Total</span>
+          </div>
+          <div>
+            <h5 style="font-size: 1.15rem; font-weight: 800; color: var(--accent-green);" id="finishSetsSummary">16</h5>
+            <span style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Series Hechas</span>
+          </div>
+        </div>
+
+        <form id="submitWorkoutReportForm">
+          <div class="form-group">
+            <label class="form-label" for="workoutRpeInput">Percepción de Esfuerzo (RPE 1 - 10)</label>
+            <input type="range" class="form-control" id="workoutRpeInput" min="1" max="10" value="8" style="padding: 0;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+              <span>1 (Muy Fácil)</span>
+              <span id="rpeValueDisplay" style="color: var(--accent-orange); font-weight: 700;">8 (Exigente)</span>
+              <span>10 (Fallo Total)</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="workoutFeedbackInput">Notas para tu Entrenador</label>
+            <textarea class="form-control" id="workoutFeedbackInput" rows="3" placeholder="¿Cómo sentiste los pesos? ¿Pudiste mantener buena técnica en las últimas series?"></textarea>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.25rem;">
+            <button type="submit" class="btn-primary" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;">
+              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              <span>Entregar Tarea y Notificar al Coach</span>
+            </button>
+            <button type="button" id="finishWorkoutNotifyWaBtn" class="btn-whatsapp-finish-action" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; font-weight: 700; font-size: 0.8rem; padding: 0.6rem; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s ease;">
+              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.45 0-2.87-.38-4.12-1.1l-.3-.17-3.12.82.83-3.04-.19-.32c-.82-1.31-1.26-2.83-1.26-4.41 0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08s.89 2.41 1.02 2.58c.13.17 1.76 2.68 4.26 3.76.6.26 1.06.41 1.42.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29z"/></svg>
+              <span>Enviar mi reporte al WhatsApp del Coach Humberto</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: CAMBIAR PERFIL DE USUARIO / ALUMNO                    -->
+  <!-- ============================================================ -->
+  <!-- ============================================================ -->
+  <!-- MODAL: PERFIL PERSONAL CONFIDENCIAL DEL ALUMNO               -->
+  <!-- ============================================================ -->
+  <div class="modal-overlay" id="myProfileModal">
+    <div class="modal-card" style="max-width: 380px;">
+      <div class="modal-card-inner">
+        <div class="modal-header">
+          <h3 class="modal-title">Mi Perfil Confidencial</h3>
+          <button class="btn-close-modal" id="closeMyProfileModalBtn">&times;</button>
+        </div>
+
+        <div class="profile-modal-hero-card" style="background: linear-gradient(135deg, rgba(255,109,0,0.12) 0%, rgba(20,22,31,0.95) 100%); border: 1px solid rgba(255,109,0,0.3); border-radius: var(--radius-md); padding: 1.1rem; margin-bottom: 1.1rem; display: flex; align-items: center; gap: 1rem;">
+          <div style="position: relative; width: 62px; height: 62px; border-radius: 50%; border: 2px solid var(--accent-orange); overflow: hidden; flex-shrink: 0;">
+            <img src="./GYMTOP/resources/res/drawable/im_comentario_4.jpg" id="myProfileModalAvatar" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div style="flex: 1;">
+            <strong style="font-size: 1.05rem; color: var(--text-primary); display: block;" id="myProfileModalName">Mateo Gómez</strong>
+            <span style="font-size: 0.76rem; color: #4ade80; font-weight: 700;" id="myProfileModalRole">Alumno TOP-GYM</span>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 3px 0 0 0;" id="myProfileModalGoal">Hipertrofia con Máquinas</p>
+          </div>
+        </div>
+
+        <div style="background: var(--bg-input); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1.1rem; font-size: 0.82rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.45rem;">
+            <span style="color: var(--text-muted);">Usuario de Login:</span>
+            <strong id="myProfileModalUsername" style="color: #4ade80; font-family: monospace;">tsalinas</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.45rem;">
+            <span style="color: var(--text-muted);">Modalidad:</span>
+            <strong id="myProfileModalModality" style="color: var(--accent-orange);">Con Máquinas</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.45rem;">
+            <span style="color: var(--text-muted);">WhatsApp:</span>
+            <span id="myProfileModalPhone" style="color: var(--text-primary); font-weight: 600;">+57 312 456 7890</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.45rem;">
+            <span style="color: var(--text-muted);">Correo:</span>
+            <span id="myProfileModalEmail" style="color: var(--text-primary); font-weight: 600;">mateo@topgym.com</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.45rem;">
+            <span style="color: var(--text-muted);">Peso / Altura:</span>
+            <span id="myProfileModalWeightHeight" style="color: var(--text-primary); font-weight: 600;">76.5 kg • 178 cm</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.45rem;">
+            <span style="color: var(--text-muted);">Clave / PIN de Acceso:</span>
+            <span id="myProfileModalPin" style="color: #ffd180; font-weight: 800; letter-spacing: 2px;">••••</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-muted);">Entrenador Asignado:</span>
+            <span style="color: #0284c7; font-weight: 700;" id="myProfileModalCoach">Coach Humberto Salinas</span>
+          </div>
+        </div>
+
+        <!-- Respaldo & Sincronización Permanente 24/7 -->
+        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.28); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 0.9rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+              <strong style="font-size: 0.82rem; color: #10b981;">Sincronización 24/7 Activa</strong>
+            </div>
+            <span style="font-size: 0.68rem; color: var(--text-muted); background: var(--bg-card); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-subtle);">Triple Capa</span>
+          </div>
+          <p style="font-size: 0.74rem; color: var(--text-secondary); margin: 0 0 8px 0; line-height: 1.35;">
+            Tus tareas, modificaciones y contraseñas están protegidas y no se restablecen jamás.
+          </p>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" id="exportBackupBtn" class="btn-secondary" style="flex: 1; min-width: 130px; font-size: 0.74rem; padding: 0.45rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-weight: 700; border-radius: 6px; background: var(--bg-input);">
+              <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+              <span>Exportar Respaldo</span>
+            </button>
+            <button type="button" id="importBackupTriggerBtn" class="btn-secondary" style="flex: 1; min-width: 130px; font-size: 0.74rem; padding: 0.45rem 0.6rem; display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-weight: 700; border-radius: 6px; background: var(--bg-input);">
+              <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+              <span>Restaurar Archivo</span>
+            </button>
+            <input type="file" id="importBackupFileInput" accept=".json,application/json" style="display: none;">
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+          <button class="btn-primary" id="openEditMyProfileBtn" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0.68rem; font-weight: 800; background: linear-gradient(135deg, #ff6d00 0%, #ea580c 100%); border-radius: var(--radius-md);">
+            <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            <span>Editar Mi Información y Contraseña</span>
+          </button>
+          <button class="btn-primary" id="logoutFromProfileModalBtn" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0.72rem; font-size: 0.88rem; font-weight: 800; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; border: none; border-radius: var(--radius-md); box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35); cursor: pointer; margin-top: 0.25rem;">
+            <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: EDITAR INFORMACIÓN DE PERFIL Y CONTRASEÑA             -->
+  <!-- ============================================================ -->
+  <div class="modal-overlay" id="editProfileModal">
+    <div class="modal-card" style="max-width: 430px;">
+      <div class="modal-card-inner">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" style="display: flex; align-items: center; gap: 7px;">
+              <svg viewBox="0 0 24 24" style="width: 19px; height: 19px; fill: var(--accent-orange);"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+              <span id="editProfileModalTitle">Editar Mi Perfil</span>
+            </h3>
+            <p style="font-size: 0.73rem; color: var(--text-secondary); margin: 2px 0 0 0;">Actualiza tu información personal y tu contraseña privada.</p>
+          </div>
+          <button class="btn-close-modal" id="closeEditProfileModalBtn">&times;</button>
+        </div>
+
+        <form id="editProfileForm">
+          <input type="hidden" id="editProfileTargetUserId" value="">
+
+          <div class="profile-avatar-edit-box" style="display: flex; align-items: center; gap: 0.9rem; background: var(--bg-input); padding: 0.7rem 0.85rem; border-radius: var(--radius-md); margin-bottom: 0.9rem; border: 1px solid var(--border-subtle);">
+            <div style="position: relative; width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent-orange); flex-shrink: 0;">
+              <img src="./GYMTOP/resources/res/drawable/im_comentario_4.jpg" id="editProfileAvatarPreview" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="flex: 1;">
+              <strong id="editProfilePhotoLabel" class="profile-avatar-title" style="font-size: 0.82rem; display: block;">Foto de Perfil</strong>
+              <span class="profile-avatar-subtitle" style="font-size: 0.7rem; color: var(--text-secondary);">Avatar o foto personalizada</span>
+            </div>
+            <button type="button" class="btn-secondary" id="editProfileChangeAvatarBtn" style="padding: 0.35rem 0.65rem; font-size: 0.72rem; font-weight: 700;">
+              Cambiar Foto
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="editProfileName" style="font-size: 0.74rem;">Nombre Completo *</label>
+              <input type="text" class="form-control" id="editProfileName" required placeholder="Tu nombre">
+            </div>
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="editProfileNick" style="font-size: 0.74rem;">Apodo / Corto *</label>
+              <input type="text" class="form-control" id="editProfileNick" required placeholder="Tu apodo">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="editProfilePhone" style="font-size: 0.74rem;">Teléfono / WhatsApp *</label>
+              <input type="tel" class="form-control" id="editProfilePhone" required placeholder="+57 300 000 0000">
+            </div>
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="editProfileEmail" style="font-size: 0.74rem;">Correo Electrónico *</label>
+              <input type="email" class="form-control" id="editProfileEmail" required placeholder="correo@ejemplo.com">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="editProfileWeight" style="font-size: 0.74rem;">Peso Actual (kg) *</label>
+              <input type="number" step="0.1" class="form-control" id="editProfileWeight" required placeholder="70.0">
+            </div>
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="editProfileHeight" style="font-size: 0.74rem;">Altura (cm) *</label>
+              <input type="number" step="1" class="form-control" id="editProfileHeight" required placeholder="175">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="editProfileAge" style="font-size: 0.74rem;">Edad (Años) *</label>
+              <input type="number" class="form-control" id="editProfileAge" required placeholder="24" min="12" max="100">
+            </div>
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" for="editProfileDistrict" style="font-size: 0.74rem;">Distrito (Lima) *</label>
+              <select class="form-control" id="editProfileDistrict" required>
+                <option value="" disabled>Selecciona distrito...</option>
+                <option value="Ancón">Ancón</option>
+                <option value="Ate">Ate</option>
+                <option value="Barranco">Barranco</option>
+                <option value="Breña">Breña</option>
+                <option value="Carabayllo">Carabayllo</option>
+                <option value="Chaclacayo">Chaclacayo</option>
+                <option value="Chorrillos">Chorrillos</option>
+                <option value="Cieneguilla">Cieneguilla</option>
+                <option value="Comas">Comas</option>
+                <option value="El Agustino">El Agustino</option>
+                <option value="Independencia">Independencia</option>
+                <option value="Jesús María">Jesús María</option>
+                <option value="La Molina">La Molina</option>
+                <option value="La Victoria">La Victoria</option>
+                <option value="Lima (Cercado)">Lima (Cercado)</option>
+                <option value="Lince">Lince</option>
+                <option value="Los Olivos">Los Olivos</option>
+                <option value="Lurigancho-Chosica">Lurigancho-Chosica</option>
+                <option value="Lurín">Lurín</option>
+                <option value="Magdalena del Mar">Magdalena del Mar</option>
+                <option value="Miraflores">Miraflores</option>
+                <option value="Pachacámac">Pachacámac</option>
+                <option value="Pucusana">Pucusana</option>
+                <option value="Pueblo Libre">Pueblo Libre</option>
+                <option value="Puente Piedra">Puente Piedra</option>
+                <option value="Punta Hermosa">Punta Hermosa</option>
+                <option value="Punta Negra">Punta Negra</option>
+                <option value="Rímac">Rímac</option>
+                <option value="San Bartolo">San Bartolo</option>
+                <option value="San Borja">San Borja</option>
+                <option value="San Isidro">San Isidro</option>
+                <option value="San Juan de Lurigancho">San Juan de Lurigancho</option>
+                <option value="San Juan de Miraflores">San Juan de Miraflores</option>
+                <option value="San Luis">San Luis</option>
+                <option value="San Martín de Porres">San Martín de Porres</option>
+                <option value="San Miguel">San Miguel</option>
+                <option value="Santa Anita">Santa Anita</option>
+                <option value="Santa María del Mar">Santa María del Mar</option>
+                <option value="Santa Rosa">Santa Rosa</option>
+                <option value="Santiago de Surco">Santiago de Surco</option>
+                <option value="Surquillo">Surquillo</option>
+                <option value="Villa El Salvador">Villa El Salvador</option>
+                <option value="Villa María del Triunfo">Villa María del Triunfo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.75rem;">
+            <label class="form-label" for="editProfileModality" style="font-size: 0.74rem;">Modalidad de Entrenamiento *</label>
+            <select class="form-control" id="editProfileModality" required>
+              <option value="machine">En Gimnasio (Con Máquinas & Poleas)</option>
+              <option value="home">En Casa (Sin Máquinas / Calistenia)</option>
+              <option value="freeweight">Pesas Libres / Mancuernas</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.75rem;">
+            <label class="form-label" for="editProfileGoal" style="font-size: 0.74rem;">Objetivo de Entrenamiento *</label>
+            <input type="text" class="form-control" id="editProfileGoal" required placeholder="Ej: Hipertrofia y definición muscular">
+          </div>
+
+          <!-- Password / PIN security edit box -->
+          <div style="background: rgba(255, 109, 0, 0.08); border: 1px solid rgba(255, 109, 0, 0.3); border-radius: var(--radius-md); padding: 0.75rem; margin-bottom: 1rem;">
+            <label class="form-label" for="editProfilePin" style="color: #ffd180; font-weight: 800; display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem; font-size: 0.76rem;">
+              <span>Nueva Contraseña / PIN Confidencial *</span>
+              <span style="font-size: 0.68rem; color: #4ade80;">Acceso privado</span>
+            </label>
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="password" class="form-control" id="editProfilePin" maxlength="30" required placeholder="Mínimo 4 caracteres o PIN" style="padding-right: 2.6rem; font-weight: 800; letter-spacing: 3px; font-size: 1.05rem;">
+              <button type="button" id="toggleEditProfilePinVisibility" style="position: absolute; right: 8px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; display: inline-flex;" title="Mostrar / Ocultar Contraseña">
+                <svg viewBox="0 0 24 24" style="width: 17px; height: 17px; fill: currentColor;"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+              </button>
+            </div>
+            <span style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px; display: block;">
+              Guarda esta clave para iniciar sesión en tu cuenta y acceder a tus rutinas personales.
+            </span>
+          </div>
+
+          <div style="display: flex;">
+            <button type="button" class="btn-secondary" id="cancelEditProfileBtn" style="display: none;">Cancelar</button>
+            <button type="submit" class="btn-primary" style="width: 100%; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+              <span>Guardar Cambios</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- FULLSCREEN AUTHENTIC LOGIN SCREEN (INICIO DE SESIÓN)         -->
+  <!-- ============================================================ -->
+  <div class="login-screen-wrapper" id="loginScreen" style="display: none;">
+    <div class="login-card-box" style="position: relative;">
+      <button type="button" class="btn-close-modal" id="closeLoginScreenBtn" title="Cerrar ventana" aria-label="Cerrar ventana" style="position: absolute; top: 16px; right: 16px; z-index: 20;">&times;</button>
+      <!-- App Branding Header -->
+      <div class="login-brand-header">
+        <div class="login-logo-glow">
+          <img src="./GYMTOP/resources/res/drawable-xxhdpi/splash_logo_icon.png" alt="TOP-GYM Logo" class="login-logo-icon">
+        </div>
+        <h1 class="login-app-title">TOP-GYM</h1>
+        <p class="login-app-subtitle">PRO TRAINING SYSTEM</p>
+        <span class="login-welcome-tag">Inicio de Sesión</span>
+      </div>
+
+      <!-- Unified Login Form -->
+      <form id="unifiedLoginForm" class="login-form" autocomplete="off" novalidate>
+        <!-- Username Field -->
+        <div class="form-group login-form-group">
+          <label class="login-form-label" for="loginUsernameInput">Nombre de Usuario o Correo *</label>
+          <div class="login-input-wrap">
+            <span class="login-input-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </span>
+            <input type="text" id="loginUsernameInput" class="form-control login-input" placeholder="Ej: tsalinas, Mateo Gómez, o correo" required autocomplete="username">
+          </div>
+        </div>
+
+        <!-- Password Field with Show/Hide Eye Button -->
+        <div class="form-group login-form-group">
+          <label class="login-form-label" for="loginPasswordInput">Contraseña *</label>
+          <div class="login-input-wrap">
+            <span class="login-input-icon">
+              <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            </span>
+            <input type="password" id="loginPasswordInput" class="form-control login-input login-input-password" placeholder="Ingresa tu contraseña" required autocomplete="current-password">
+            <button type="button" class="login-eye-toggle-btn" id="toggleLoginPasswordBtn" title="Mostrar u ocultar contraseña" aria-label="Mostrar u ocultar contraseña">
+              <svg viewBox="0 0 24 24" class="eye-icon-svg" id="eyeIconOpenSvg" style="width: 19px; height: 19px; fill: currentColor;">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+              <svg viewBox="0 0 24 24" class="eye-icon-svg" id="eyeIconClosedSvg" style="width: 19px; height: 19px; fill: currentColor; display: none;">
+                <path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Error Banner -->
+        <div id="loginErrorMessage" class="login-error-alert" style="display: none;">
+          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor; flex-shrink: 0;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          <span id="loginErrorText">Usuario o contraseña incorrectos.</span>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-primary login-submit-btn" id="loginSubmitBtn">
+          <svg viewBox="0 0 24 24" style="width: 17px; height: 17px; fill: currentColor;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          <span>Iniciar Sesión</span>
+        </button>
+
+        <!-- Forgot Password Button -->
+        <div class="login-forgot-wrap">
+          <button type="button" class="login-forgot-btn" id="openForgotPasswordBtn">
+            ¿Olvidaste tu contraseña?
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: RECUPERAR CONTRASEÑA CON VALIDACIÓN DE DATOS          -->
+  <!-- ============================================================ -->
+  <!-- ============================================================ -->
+  <!-- MODAL: RECUPERAR CONTRASEÑA POR CORREO CON ENLACE ÚNICO      -->
+  <!-- ============================================================ -->
+  <div class="modal-overlay" id="forgotPasswordModal">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-card-inner">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="forgotModalMainTitle" style="display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: var(--accent-orange);"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              <span>Recuperar Contraseña por Correo</span>
+            </h3>
+            <p style="font-size: 0.74rem; color: var(--text-secondary); margin: 3px 0 0 0;" id="forgotModalSubtitle">
+              Ingresa el correo electrónico del alumno para enviarte un enlace único y seguro.
+            </p>
+          </div>
+          <button type="button" class="btn-close-modal" id="closeForgotPasswordModalBtn">&times;</button>
+        </div>
+
+        <!-- PASO 1: Formulario para ingresar correo del alumno -->
+        <div id="forgotStepRequestEmail" style="margin-top: 1rem;">
+          <form id="forgotPasswordForm" novalidate>
+            <div class="form-group" style="margin-bottom: 0.85rem;">
+              <label class="form-label" for="forgotEmailInput" style="font-size: 0.78rem; font-weight: 800;">Correo Electrónico Registrado del Alumno *</label>
+              <div class="login-input-wrap" style="border-radius: 14px;">
+                <span class="login-input-icon">
+                  <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </span>
+                <input type="email" class="form-control login-input" id="forgotEmailInput" required placeholder="Ej: mateo@topgym.com o valen@topgym.com" style="border-radius: 14px; padding-left: 2.6rem;">
+              </div>
+
+              <!-- Quick Email Preset Chips -->
+              <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+                <span style="font-size: 0.68rem; color: var(--text-muted); align-self: center;">Cuentas:</span>
+                <button type="button" class="btn-chip" onclick="document.getElementById('forgotEmailInput').value='mateo@topgym.com';" style="background: rgba(255, 109, 0, 0.12); border: 1px solid rgba(255, 109, 0, 0.3); color: #ff9100; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; cursor: pointer;">mateo@topgym.com (Mateo)</button>
+                <button type="button" class="btn-chip" onclick="document.getElementById('forgotEmailInput').value='valen@topgym.com';" style="background: rgba(236, 72, 153, 0.12); border: 1px solid rgba(236, 72, 153, 0.3); color: #f472b6; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; cursor: pointer;">valen@topgym.com (Valentina)</button>
+                <button type="button" class="btn-chip" onclick="document.getElementById('forgotEmailInput').value='humberto.coach@topgym.com';" style="background: rgba(0, 176, 255, 0.12); border: 1px solid rgba(0, 176, 255, 0.3); color: #80d8ff; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; cursor: pointer;">Coach Humberto</button>
+              </div>
+            </div>
+
+            <!-- Error banner -->
+            <div id="forgotErrorMsg" style="display: none; color: #ef4444; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: var(--radius-sm); padding: 0.55rem 0.75rem; font-size: 0.76rem; font-weight: 700; margin-bottom: 0.85rem;">
+              No se encontró ninguna cuenta registrada con este correo electrónico.
+            </div>
+
+            <div style="display: flex; margin-top: 1.25rem;">
+              <button type="button" class="btn-secondary" id="cancelForgotPasswordBtn" style="display: none;">
+                Cancelar
+              </button>
+              <button type="submit" class="btn-primary" id="sendResetLinkBtn" style="width: 100%; justify-content: center; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                <span>Enviar Enlace al Correo</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- PASO 2: Bandeja de Entrada Simulada con el Enlace Único Recibido -->
+        <div id="forgotStepInboxEmail" style="display: none;">
+          <div class="email-inbox-card">
+            <div class="email-inbox-header">
+              <span class="email-inbox-badge">
+                <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #10b981;"></span>
+                <span>Correo Recibido en tu Bandeja</span>
+              </span>
+              <span style="font-size: 0.7rem; color: var(--text-muted);">Ahora mismo</span>
+            </div>
+
+            <div class="email-inbox-meta">
+              <div><strong>De:</strong> <span style="color: #0284c7;">seguridad@topgym.app</span> (TOP-GYM Security)</div>
+              <div><strong>Para:</strong> <span id="inboxRecipientEmail" style="color: var(--text-primary); font-weight: 700;">mateo@topgym.com</span> (<span id="inboxRecipientName">Mateo Gómez</span>)</div>
+              <div><strong>Asunto:</strong> <span style="color: var(--text-primary); font-weight: 600;">🔐 Restablecimiento de contraseña TOP-GYM</span></div>
+            </div>
+
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 0 0 0.5rem 0; line-height: 1.45;">
+              Hola <strong id="inboxGreetingName" style="color: var(--accent-orange);">Mateo Gómez</strong>, hemos recibido una solicitud para restablecer tu contraseña. Haz clic en tu <strong>enlace único</strong> para ingresar tu nueva clave:
+            </p>
+
+            <!-- Unique Link Display -->
+            <div class="unique-reset-link-box">
+              <span class="unique-link-url" id="inboxUniqueLinkText">https://topgym.app/auth/reset?token=tg_sec_...</span>
+              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: var(--accent-orange); flex-shrink: 0;"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 0.65rem;">
+              <button type="button" class="btn-secondary" id="copyResetLinkBtn" style="flex: 1; justify-content: center; font-weight: 700; padding: 0.6rem; font-size: 0.78rem; display: flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span>Copiar Enlace Único</span>
+              </button>
+            </div>
+
+            <button type="button" class="btn-primary" id="openResetPasswordFormBtn" style="width: 100%; margin-top: 0.65rem; justify-content: center; font-weight: 800; padding: 0.8rem; font-size: 0.84rem; display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" style="width: 17px; height: 17px; fill: currentColor;"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+              <span>Abrir Enlace Único y Crear Nueva Contraseña</span>
+            </button>
+
+            <span style="display: block; text-align: center; font-size: 0.69rem; color: var(--text-muted); margin-top: 0.6rem;">
+              Este enlace expira en 15 minutos y solo puede ser usado una vez.
+            </span>
+          </div>
+
+          <div style="display: flex; justify-content: center; margin-top: 0.85rem;">
+            <button type="button" class="btn-secondary" id="backToRequestEmailBtn" style="font-size: 0.74rem; padding: 4px 12px;">
+              ← Probar con otro correo
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 3: Formulario para ingresar la Nueva Contraseña -->
+        <div id="forgotStepNewPassword" style="display: none; margin-top: 1rem;">
+          <form id="setNewPasswordForm" novalidate>
+            <div style="background: rgba(255, 109, 0, 0.08); border: 1px solid rgba(255, 109, 0, 0.25); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 0.72rem; color: var(--text-secondary); display: block;">Restableciendo contraseña para:</span>
+              <strong id="newPassAccountName" style="font-size: 0.88rem; color: var(--text-primary);">Mateo Gómez</strong>
+              <span id="newPassAccountEmail" style="font-size: 0.74rem; color: var(--accent-orange); display: block;">mateo@topgym.com</span>
+            </div>
+
+            <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); padding: 0.55rem 0.8rem; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" style="width: 17px; height: 17px; fill: #ef4444; flex-shrink: 0;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              <span style="font-size: 0.71rem; color: #fca5a5; line-height: 1.35;">
+                <strong>Eliminación de Clave Anterior:</strong> La contraseña anterior será dada de baja de inmediato. Solo podrás iniciar sesión con la nueva contraseña que crees aquí.
+              </span>
+            </div>
+
+            <!-- Nueva Contraseña -->
+            <div class="form-group" style="margin-bottom: 0.85rem;">
+              <label class="form-label" for="newPasswordInput" style="font-size: 0.76rem; font-weight: 800;">Nueva Contraseña *</label>
+              <div class="login-input-wrap" style="border-radius: 14px;">
+                <span class="login-input-icon">
+                  <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                </span>
+                <input type="password" id="newPasswordInput" class="form-control login-input" placeholder="Ingresa tu nueva contraseña" required style="border-radius: 14px; padding-left: 2.6rem; padding-right: 2.8rem;">
+                <button type="button" class="login-eye-toggle-btn" id="toggleNewPassEyeBtn" title="Mostrar contraseña">
+                  <svg viewBox="0 0 24 24" class="eye-svg" style="width: 18px; height: 18px; fill: currentColor;"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Confirmar Contraseña -->
+            <div class="form-group" style="margin-bottom: 0.85rem;">
+              <label class="form-label" for="confirmPasswordInput" style="font-size: 0.76rem; font-weight: 800;">Confirmar Nueva Contraseña *</label>
+              <div class="login-input-wrap" style="border-radius: 14px;">
+                <span class="login-input-icon">
+                  <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                </span>
+                <input type="password" id="confirmPasswordInput" class="form-control login-input" placeholder="Confirma tu nueva contraseña" required style="border-radius: 14px; padding-left: 2.6rem; padding-right: 2.8rem;">
+                <button type="button" class="login-eye-toggle-btn" id="toggleConfirmPassEyeBtn" title="Mostrar contraseña">
+                  <svg viewBox="0 0 24 24" class="eye-svg" style="width: 18px; height: 18px; fill: currentColor;"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Error banner -->
+            <div id="newPassErrorMsg" style="display: none; color: #ef4444; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: var(--radius-sm); padding: 0.55rem 0.75rem; font-size: 0.76rem; font-weight: 700; margin-bottom: 0.85rem;">
+              Las contraseñas no coinciden o no cumplen con el mínimo de caracteres.
+            </div>
+
+            <div style="display: flex; margin-top: 1.25rem;">
+              <button type="button" class="btn-secondary" id="cancelSetNewPassBtn" style="display: none;">
+                Cancelar
+              </button>
+              <button type="submit" class="btn-primary" id="saveNewPasswordBtn" style="width: 100%; justify-content: center; font-weight: 800; background: linear-gradient(135deg, #10b981 0%, #059669 100%); display: inline-flex; align-items: center; gap: 6px;">
+                <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                <span>Guardar y Actualizar Contraseña</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: REGISTRAR NUEVO ALUMNO CON WHATSAPP Y DATOS COMPLETOS -->
+  <!-- ============================================================ -->
+  <div class="modal-overlay" id="registerStudentModal">
+    <div class="modal-card" style="max-width: 460px;">
+      <div class="modal-card-inner">
+        <div class="modal-header">
+          <h3 class="modal-title">Registrar Nuevo Alumno</h3>
+          <button class="btn-close-modal" id="closeRegisterStudentModalBtn">&times;</button>
+        </div>
+
+        <form id="registerStudentForm">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="regStudentName">Nombre Completo *</label>
+              <input type="text" class="form-control" id="regStudentName" placeholder="Ej: Tayron Salinas" required>
+              <div id="regStudentUsernameBadge" style="background: rgba(255, 109, 0, 0.1); border: 1px solid rgba(255, 109, 0, 0.25); border-radius: var(--radius-sm); padding: 4px 8px; margin-top: 5px; font-size: 0.72rem; color: #ffd180; display: flex; justify-content: space-between; align-items: center;">
+                <span>Usuario único para login: <strong id="regStudentUsernamePreview" style="color: #4ade80; font-family: monospace;">tsalinas</strong></span>
+                <span style="color: #4ade80; font-size: 0.68rem; font-weight: 700;">✓ Sin redundancia</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regStudentNick">Apodo / Nombre Corto *</label>
+              <input type="text" class="form-control" id="regStudentNick" placeholder="Ej: Tayron" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="regStudentPhone">Teléfono / WhatsApp *</label>
+              <div style="position: relative;">
+                <input type="tel" class="form-control" id="regStudentPhone" placeholder="+57 300 123 4567" required style="padding-left: 2.3rem;">
+                <svg viewBox="0 0 24 24" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); width: 17px; height: 17px; fill: #25D366;"><path d="M16.75 13.96c.25.13.41.2.46.3.06.11.04.61-.21 1.18-.25.56-.96.9-1.34 1-.44.12-.9.13-1.37.02-.62-.15-1.57-.55-2.73-1.58-1.46-1.3-2.42-2.92-2.7-3.41-.28-.48-.03-.74.1-.98.11-.21.25-.42.37-.58.12-.17.16-.29.25-.48.08-.19.04-.36-.02-.5-.06-.15-.55-1.33-.76-1.82-.2-.48-.41-.41-.56-.42h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.18 1.78 2.72 4.31 3.81.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.5-.61 1.71-1.2.21-.6.21-1.1.15-1.21-.06-.11-.22-.17-.47-.3zM12 2a10 10 0 0 0-8.66 15L2 22l5.13-1.35A10 10 0 1 0 12 2zm0 18.2c-1.59 0-3.08-.43-4.37-1.18l-.31-.18-3.05.8.82-2.97-.2-.32A8.19 8.19 0 1 1 12 20.2z"/></svg>
+              </div>
+              <span style="font-size: 0.72rem; color: #4ade80; margin-top: 3px; display: block;">
+                Acceso directo a WhatsApp habilitado
+              </span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regStudentEmail">Correo Electrónico *</label>
+              <input type="email" class="form-control" id="regStudentEmail" placeholder="ej: alumno@gmail.com" required autocomplete="email">
+              <span style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 3px; display: block;">
+                Ingresa el correo real del alumno para recuperación de cuenta
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regStudentPin">Contraseña / PIN de Acceso del Alumno *</label>
+            <div style="position: relative;">
+              <input type="text" class="form-control" id="regStudentPin" value="1991" placeholder="1991" maxlength="8" required style="letter-spacing: 4px; font-weight: 800; font-size: 1.15rem; text-align: center; color: #4ade80; background: rgba(0,0,0,0.45); border-color: rgba(74, 222, 128, 0.4);">
+            </div>
+            <span style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 3px; display: block;">
+              Contraseña predeterminada asignada: <strong style="color: #4ade80;">1991</strong> (el alumno puede cambiarla en su perfil).
+            </span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="regStudentModality">Modalidad Principal *</label>
+              <select class="form-control" id="regStudentModality" required>
+                <option value="machine">En Gimnasio (Con Máquinas & Poleas)</option>
+                <option value="home">En Casa (Sin Máquinas / Calistenia)</option>
+                <option value="freeweight">Pesas Libres / Mancuernas</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regStudentGoal">Objetivo de Entrenamiento *</label>
+              <input type="text" class="form-control" id="regStudentGoal" placeholder="Ej: Hipertrofia & Fuerza" required>
+            </div>
+          </div>
+
+          <!-- Edad y Distrito de Lima Metropolitana -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="regStudentAge">Edad (Años) *</label>
+              <div class="input-stepper-wrap">
+                <input type="number" class="form-control" id="regStudentAge" placeholder="24" min="12" max="100" value="24" required>
+                <div class="stepper-controls">
+                  <button type="button" class="stepper-btn stepper-up" tabindex="-1" title="Aumentar edad">
+                    <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg>
+                  </button>
+                  <button type="button" class="stepper-btn stepper-down" tabindex="-1" title="Disminuir edad">
+                    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regStudentDistrict">Distrito (Lima Metropolitana) *</label>
+              <select class="form-control" id="regStudentDistrict" required>
+                <option value="" disabled>Selecciona un distrito...</option>
+                <option value="Ancón">Ancón</option>
+                <option value="Ate">Ate</option>
+                <option value="Barranco">Barranco</option>
+                <option value="Breña">Breña</option>
+                <option value="Carabayllo">Carabayllo</option>
+                <option value="Chaclacayo">Chaclacayo</option>
+                <option value="Chorrillos">Chorrillos</option>
+                <option value="Cieneguilla">Cieneguilla</option>
+                <option value="Comas">Comas</option>
+                <option value="El Agustino">El Agustino</option>
+                <option value="Independencia">Independencia</option>
+                <option value="Jesús María">Jesús María</option>
+                <option value="La Molina">La Molina</option>
+                <option value="La Victoria">La Victoria</option>
+                <option value="Lima (Cercado)">Lima (Cercado)</option>
+                <option value="Lince">Lince</option>
+                <option value="Los Olivos">Los Olivos</option>
+                <option value="Lurigancho-Chosica">Lurigancho-Chosica</option>
+                <option value="Lurín">Lurín</option>
+                <option value="Magdalena del Mar">Magdalena del Mar</option>
+                <option value="Miraflores" selected>Miraflores</option>
+                <option value="Pachacámac">Pachacámac</option>
+                <option value="Pucusana">Pucusana</option>
+                <option value="Pueblo Libre">Pueblo Libre</option>
+                <option value="Puente Piedra">Puente Piedra</option>
+                <option value="Punta Hermosa">Punta Hermosa</option>
+                <option value="Punta Negra">Punta Negra</option>
+                <option value="Rímac">Rímac</option>
+                <option value="San Bartolo">San Bartolo</option>
+                <option value="San Borja">San Borja</option>
+                <option value="San Isidro">San Isidro</option>
+                <option value="San Juan de Lurigancho">San Juan de Lurigancho</option>
+                <option value="San Juan de Miraflores">San Juan de Miraflores</option>
+                <option value="San Luis">San Luis</option>
+                <option value="San Martín de Porres">San Martín de Porres</option>
+                <option value="San Miguel">San Miguel</option>
+                <option value="Santa Anita">Santa Anita</option>
+                <option value="Santa María del Mar">Santa María del Mar</option>
+                <option value="Santa Rosa">Santa Rosa</option>
+                <option value="Santiago de Surco">Santiago de Surco</option>
+                <option value="Surquillo">Surquillo</option>
+                <option value="Villa El Salvador">Villa El Salvador</option>
+                <option value="Villa María del Triunfo">Villa María del Triunfo</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="regStudentWeight">Peso Inicial (kg)</label>
+              <div class="input-stepper-wrap">
+                <input type="number" class="form-control" id="regStudentWeight" placeholder="75.0" step="0.1" min="30" max="250" value="75.0" required>
+                <div class="stepper-controls">
+                  <button type="button" class="stepper-btn stepper-up" tabindex="-1" title="Aumentar peso">
+                    <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg>
+                  </button>
+                  <button type="button" class="stepper-btn stepper-down" tabindex="-1" title="Disminuir peso">
+                    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regStudentHeight">Altura (cm)</label>
+              <div class="input-stepper-wrap">
+                <input type="number" class="form-control" id="regStudentHeight" placeholder="175" min="120" max="230" value="175" required>
+                <div class="stepper-controls">
+                  <button type="button" class="stepper-btn stepper-up" tabindex="-1" title="Aumentar altura">
+                    <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg>
+                  </button>
+                  <button type="button" class="stepper-btn stepper-down" tabindex="-1" title="Disminuir altura">
+                    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selector de Foto de Perfil (Subir Foto Personalizada o Presets) -->
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 800;">Foto de Perfil del Alumno</label>
+            
+            <!-- Custom Photo Upload Box -->
+            <div style="display: flex; gap: 1rem; align-items: center; background: var(--bg-input); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px dashed rgba(255,109,0,0.5); margin-bottom: 0.75rem;">
+              <div id="regCustomAvatarPreviewBox" style="width: 58px; height: 58px; border-radius: 50%; border: 2px solid var(--accent-orange); overflow: hidden; background: #000; flex-shrink: 0; box-shadow: 0 0 10px var(--accent-orange-glow);">
+                <img id="regCustomAvatarPreview" src="./GYMTOP/resources/res/drawable/im_comentario_4.jpg" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div style="flex: 1;">
+                <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">Subir foto propia del alumno</div>
+                <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 8px;">Carga una foto real desde tu dispositivo o galería</div>
+                <input type="file" id="regStudentCustomPhotoInput" accept="image/*" style="display: none;">
+                <button type="button" class="btn-primary" id="regUploadCustomPhotoBtn" style="padding: 0.4rem 0.85rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 5px;">
+                  <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+                  <span>Subir Foto del Dispositivo</span>
+                </button>
+              </div>
+            </div>
+
+            <label class="form-label" style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">O elige una foto de atleta predeterminada:</label>
+            <div class="avatar-picker-grid" id="regAvatarPickerContainer">
+              <!-- Injected by JS -->
+            </div>
+            <input type="hidden" id="regSelectedAvatar" value="./GYMTOP/resources/res/drawable/im_comentario_4.jpg">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regCoachNotes">Mensaje Inicial del Coach Humberto Salinas</label>
+            <textarea class="form-control" id="regCoachNotes" rows="2" placeholder="¡Bienvenido a TOP-GYM! Tu plan personalizado está listo para comenzar."></textarea>
+          </div>
+
+          <div style="display: flex; margin-top: 1.25rem;">
+            <button type="button" class="btn-secondary" id="cancelRegisterStudentBtn" style="display: none;">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary" style="width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;">
+              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+              <span>Guardar y Registrar Alumno</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: FICHA TÉCNICA DE EJERCICIO CON ANATOMÍA MUSCULAR      -->
+  <!-- ============================================================ -->
+  <div class="modal-overlay" id="exerciseDetailModal">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-card-inner">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title" id="modalExDetailName">Nombre del Ejercicio</h3>
+            <span class="task-badge" id="modalExDetailModalityBadge" style="margin-top: 4px; display: inline-block;">Modalidad</span>
+          </div>
+          <button class="btn-close-modal" id="closeExerciseDetailModalBtn">&times;</button>
+        </div>
+
+        <div class="exercise-detail-body-layout">
+          <!-- Animated GIF Player with Fluidity -->
+          <div class="exercise-detail-gif-box">
+            <img src="" alt="Demostración animada" class="exercise-detail-gif-viewer" id="modalExDetailGif">
+            <span class="gif-fps-badge">HD • Técnica Oficial</span>
+          </div>
+
+          <!-- Anatomical Muscle Highlight Map -->
+          <div class="exercise-detail-anatomy-box">
+            <div class="anatomy-muscle-viewer">
+              <img src="./GYMTOP/resources/res/drawable/frente_base.png" alt="Base Anatómica" class="anatomy-base-layer" id="modalExDetailAnatomyBase">
+              <img src="./GYMTOP/resources/res/drawable/frente_gm0.png" alt="Músculo Activo" class="anatomy-overlay-layer" id="modalExDetailAnatomyOverlay">
+            </div>
+            <div style="margin-top: 0.75rem; text-align: center;">
+              <div class="anatomy-badge-pill" style="margin: 0 auto; display: inline-flex;">
+                <span class="anatomy-dot"></span>
+                <strong id="modalExDetailPrimaryMuscle">Pectoral Mayor</strong>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 6px;" id="modalExDetailSecondaryMuscle">
+                Secundarios: Tríceps & Deltoides
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Execution Instructions & Equipment -->
+        <div style="background: var(--bg-input); border-radius: var(--radius-md); padding: 1rem; margin: 1rem 0;">
+          <h5 style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-orange); margin-bottom: 0.4rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;">
+            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <span>Instrucciones de Ejecución & Técnica</span>
+          </h5>
+          <p style="font-size: 0.88rem; color: var(--text-primary); line-height: 1.5;" id="modalExDetailInstructions">
+            Detalles de la técnica.
+          </p>
+          <div style="display: flex; gap: 1rem; margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-secondary); flex-wrap: wrap;">
+            <span><strong>Equipamiento:</strong> <span id="modalExDetailEquipment">Máquina</span></span>
+            <span><strong>Descanso sugerido:</strong> <span id="modalExDetailRest">60s</span></span>
+          </div>
+        </div>
+
+        <div style="display: flex;">
+          <button class="btn-secondary" id="closeExerciseDetailModalBtn2" style="display: none;">
+            Cerrar
+          </button>
+          <button class="btn-primary" id="startSingleExerciseLiveBtn" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+            <span>Iniciar Este Ejercicio en Vivo</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: CAMBIAR FOTO DE PERFIL DEL ALUMNO                     -->
+  <!-- ============================================================ -->
+  <div class="modal-overlay" id="changeAvatarModal">
+    <div class="modal-card" style="max-width: 400px;">
+      <div class="modal-card-inner">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title">Personalizar Foto de Perfil</h3>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 3px;">
+              Sube tu foto propia desde tu galería o elige una de las fotos oficiales TOP-GYM
+            </p>
+          </div>
+          <button class="btn-close-modal" id="closeChangeAvatarModalBtn">&times;</button>
+        </div>
+
+        <!-- Live Avatar Preview & Custom File Upload -->
+        <div style="display: flex; flex-direction: column; align-items: center; margin: 1rem 0; padding: 1.25rem; background: var(--bg-input); border-radius: var(--radius-md); border: 1px dashed rgba(255,109,0,0.5);">
+          <div style="position: relative; width: 96px; height: 96px; border-radius: 50%; overflow: hidden; border: 3px solid var(--accent-orange); box-shadow: 0 0 20px var(--accent-orange-glow); margin-bottom: 0.85rem; background: #000;">
+            <img id="changeAvatarPreviewImg" src="./GYMTOP/resources/res/drawable/im_comentario_4.jpg" alt="Preview Foto" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <input type="file" id="studentCustomAvatarFileInput" accept="image/*" style="display: none;">
+          <button type="button" class="btn-primary" id="triggerStudentCustomAvatarUploadBtn" style="padding: 0.5rem 1.1rem; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 7px;">
+            <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+            <span>Subir Foto de mi Dispositivo / Galería</span>
+          </button>
+          <span style="font-size: 0.72rem; color: var(--text-muted); margin-top: 6px;">Admite JPG, PNG, WEBP (se ajusta y optimiza automáticamente)</span>
+        </div>
+
+        <!-- Presets Athlete Grid -->
+        <label class="form-label" style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 0.5rem; display: block; font-weight: 700;">
+          O selecciona una foto de atleta TOP-GYM:
+        </label>
+        <div class="avatar-picker-grid" id="studentAvatarPresetsGrid" style="margin-bottom: 1.25rem;">
+          <!-- Injected via JS -->
+        </div>
+        <input type="hidden" id="studentAvatarSelectedValue" value="">
+
+        <!-- Action Buttons -->
+        <div style="display: flex;">
+          <button type="button" class="btn-secondary" id="cancelChangeAvatarModalBtn" style="display: none;">
+            Cancelar
+          </button>
+          <button type="button" class="btn-primary" id="saveChangeAvatarModalBtn" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            <span>Guardar Foto de Perfil</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: DETALLE Y SUPERVISIÓN DE TAREA / ENTREGA DE ALUMNO     -->
+  <!-- ============================================================ -->
+  <div class="modal-overlay" id="coachTaskDetailModal">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-card-inner">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="" alt="Alumno" class="user-avatar-mini" id="coachModalStudentAvatar" style="width: 44px; height: 44px; min-width: 44px; min-height: 44px; max-width: 44px; max-height: 44px; aspect-ratio: 1 / 1; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2.5px solid var(--accent-orange);">
+            <div>
+              <h3 class="modal-title" id="coachModalStudentName" style="font-size: 1.05rem; margin-bottom: 2px;">Nombre del Alumno</h3>
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="task-badge" id="coachModalTaskStatusBadge" style="font-size: 0.68rem; padding: 2px 8px;">Estado</span>
+                <span style="font-size: 0.72rem; color: var(--text-muted);" id="coachModalStudentMeta">Modalidad • Distrito</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn-close-modal" id="closeCoachTaskDetailModalBtn" onclick="if(window.closeCoachTaskDetailModal) window.closeCoachTaskDetailModal()">&times;</button>
+        </div>
+
+        <!-- Task & Workout Title Header -->
+        <div style="background: var(--bg-input); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin: 0.85rem 0 0.75rem 0; border: 1px solid var(--border-subtle);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+            <div>
+              <span style="font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--accent-orange); letter-spacing: 0.5px;">Sesión Asignada</span>
+              <h4 id="coachModalWorkoutTitle" style="font-size: 1.1rem; font-weight: 800; margin: 2px 0 4px 0;">Título del Entrenamiento</h4>
+            </div>
+            <span id="coachModalScheduledDate" style="font-size: 0.72rem; color: var(--text-secondary); background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 6px; font-weight: 700; white-space: nowrap;">Fecha</span>
+          </div>
+          <p id="coachModalCoachNotes" style="font-size: 0.78rem; color: var(--text-secondary); margin: 4px 0 0 0; font-style: italic; line-height: 1.4;">
+            Instrucciones dadas.
+          </p>
+        </div>
+
+        <!-- Student Submission Report Section (If Completed) -->
+        <div id="coachModalSubmissionSection" style="display: none; background: linear-gradient(135deg, rgba(0, 176, 255, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(0, 176, 255, 0.35); border-radius: var(--radius-md); padding: 0.95rem 1.1rem; margin-bottom: 0.85rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px; color: #00b0ff; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">
+              <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+              <span>Mensaje Completo del Alumno</span>
+            </div>
+            <span id="coachModalCompletedAt" style="font-size: 0.72rem; color: #10b981; font-weight: 700; background: rgba(16, 185, 129, 0.15); padding: 2px 8px; border-radius: 6px;">Fecha</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span style="font-size: 0.75rem; color: var(--text-secondary);">Esfuerzo percibido:</span>
+            <span id="coachModalRpePill" style="font-size: 0.74rem; font-weight: 800; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 8px; border-radius: 8px;">RPE 8/10</span>
+          </div>
+          <div id="coachModalFeedbackContainer" style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid #00b0ff; padding: 0.75rem 0.9rem; border-radius: var(--radius-sm);">
+            <p id="coachModalStudentFeedback" style="font-size: 0.86rem; color: var(--text-primary); margin: 0; line-height: 1.5; font-style: italic; word-break: break-word;">
+              "Comentario del alumno"
+            </p>
+          </div>
+        </div>
+
+        <!-- Pending Status Banner (If Pending) -->
+        <div id="coachModalPendingSection" style="display: none; background: rgba(255, 145, 0, 0.08); border: 1px solid rgba(255, 145, 0, 0.3); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-bottom: 0.85rem; font-size: 0.78rem; color: #fb923c;">
+          <div style="display: flex; align-items: center; gap: 6px; font-weight: 700;">
+            <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            <span>Sesión Pendiente en el Cronograma del Alumno</span>
+          </div>
+          <p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.74rem;">El estudiante aún no ha registrado el check de completado en su sesión.</p>
+        </div>
+
+        <!-- Exercises List Breakdown -->
+        <div style="margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <strong style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary);">
+              Ejercicios Incluidos (<span id="coachModalExerciseCount">0</span>)
+            </strong>
+          </div>
+          <div class="specific-exercises-scroll-list" id="coachModalExercisesList" style="max-height: 180px;">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Interactive Direct Actions -->
+        <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+          <a id="coachModalWhatsAppBtn" href="#" target="_blank" class="btn-primary" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; padding: 0.68rem; font-size: 0.82rem; border-radius: var(--radius-md);">
+            <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.45 0-2.87-.38-4.12-1.1l-.3-.17-3.12.82.83-3.04-.19-.32c-.82-1.31-1.26-2.83-1.26-4.41 0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08s.89 2.41 1.02 2.58c.13.17 1.76 2.68 4.26 3.76.6.26 1.06.41 1.42.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29z"/></svg>
+            <span id="coachModalWhatsAppBtnText">Enviar Retroalimentación por WhatsApp</span>
+          </a>
+
+          <button type="button" class="btn-secondary" id="coachModalViewStudentScheduleBtn" style="display: flex; align-items: center; justify-content: center; gap: 7px; font-weight: 700; padding: 0.65rem; font-size: 0.82rem; border-radius: var(--radius-md);">
+            <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span id="coachModalViewStudentBtnText">Ver en el Cronograma de este Alumno</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="audio.js?v=133"></script>
+  <script src="data.js?v=133"></script>
+  <script src="app.js?v=133"></script>
+</body>
+</html>
